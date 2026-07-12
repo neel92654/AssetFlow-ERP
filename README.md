@@ -3,7 +3,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-Database-blue)
 ![License](https://img.shields.io/badge/License-Hackathon-green)
 
-# 🚀 AssetFlow-ERP
+# <img width="35" height="35" alt="image" src="https://github.com/user-attachments/assets/4f772494-271f-46cb-9436-0bc9f8d171b9" /> AssetFlow-ERP
 
 > **Enterprise Asset & Resource Management System**
 

@@ -11,7 +11,7 @@ AssetFlow-ERP is a centralized ERP solution that enables organizations to effici
 
 ---
 
-## 📌 Problem Statement
+## Problem Statement
 
 Organizations often rely on spreadsheets or disconnected systems to manage assets, resulting in inefficient tracking, duplicate allocations, scheduling conflicts, delayed maintenance, and poor audit visibility.
 
@@ -131,15 +131,6 @@ python app.py
 ```
 
 Open `login.html` in your browser or serve the frontend using your preferred local server.
-
----
-
-## 👨‍💻 Team
-
-- Member 1
-- Member 2
-- Member 3
-- Member 4
 
 ---
 

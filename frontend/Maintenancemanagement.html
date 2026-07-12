@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AssetFlow - Maintenance Kanban</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS & Configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#dbe1ff",
+                        "surface-bright": "#faf8ff",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface": "#faf8ff",
+                        "secondary": "#505f76",
+                        "surface-tint": "#0053db",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ededf9",
+                        "on-surface": "#191b23",
+                        "background": "#faf8ff",
+                        "tertiary": "#943700",
+                        "secondary-fixed": "#d3e4fe",
+                        "outline-variant": "#c3c6d7",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-background": "#191b23",
+                        "on-surface-variant": "#434655",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-variant": "#e1e2ed",
+                        "on-primary-container": "#eeefff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "tertiary-container": "#bc4800",
+                        "on-primary-fixed": "#00174b",
+                        "inverse-surface": "#2e3039",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d9d9e5",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary-fixed": "#360f00",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3fe",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737686"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for Kanban board */
+        .kanban-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .kanban-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .kanban-scroll::-webkit-scrollbar-thumb {
+            background-color: #c3c6d7;
+            border-radius: 4px;
+        }
+        .kanban-scroll::-webkit-scrollbar-thumb:hover {
+            background-color: #737686;
+        }
+        .drag-over {
+            border: 2px dashed #004ac6 !important;
+            background-color: #f3f3fe !important;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen w-screen overflow-hidden flex">
+<!-- SideNavBar (Generated from JSON) -->
+<nav class="fixed left-0 top-0 bottom-0 flex flex-col w-64 z-40 py-lg bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline">
+<!-- Header -->
+<div class="px-lg mb-xl">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-black text-on-surface" onclick="window.location.href='dashboard.html'" style=" cursor: pointer;">AssetFlow</h1>
+</div>
+<p class="font-label-md text-label-md text-secondary ml-10">Enterprise EAM</p>
+</div>
+<!-- Main Navigation -->
+<div class="flex-1 overflow-y-auto px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="dashboard.html">
+<span class="material-symbols-outlined text-[20px]">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="organisationsetup.html">
+<span class="material-symbols-outlined text-[20px]">corporate_fare</span> Organization
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="Assetregistration.html">
+<span class="material-symbols-outlined text-[20px]">contact_page</span> Directory
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="Assetallocation.html">
+<span class="material-symbols-outlined text-[20px]">account_tree</span> Allocations
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="resourcebooking.html">
+<span class="material-symbols-outlined text-[20px]">event_available</span> Booking
+            </a>
+<!-- Active State: Maintenance -->
+<a class="flex items-center gap-sm bg-primary-container text-on-primary-container rounded-lg px-md py-sm font-bold border-l-4 border-primary font-label-lg text-label-lg scale-[0.99] duration-100" href="Maintenancemanagement.html">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">build</span> Maintenance
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="Assetaudit.html">
+<span class="material-symbols-outlined text-[20px]">fact_check</span> Audits
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="Reportandanalysis.html">
+<span class="material-symbols-outlined text-[20px]">assessment</span> Reports
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="Activitylogs.html">
+<span class="material-symbols-outlined text-[20px]">history</span> Logs
+            </a>
+</div>
+<!-- Footer Navigation -->
+<div class="px-sm mt-auto pt-md border-t border-outline-variant flex flex-col gap-xs">
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span> Support
+            </a>
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-lg text-label-lg" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<span class="material-symbols-outlined text-[20px]">logout</span> Sign Out
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col ml-64 min-w-0 bg-background h-screen">
+<!-- TopNavBar (Generated from JSON) -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50 bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-none">
+<!-- Left: Search -->
+<div class="flex-1 max-w-md flex items-center relative">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="Search maintenance records..." type="text"/>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-px h-6 bg-outline-variant mx-sm"></div>
+<div class="w-9 h-9 rounded-full overflow-hidden border border-outline-variant shrink-0 cursor-pointer">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate technician in bright, modern lighting. High quality photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXEzZlsQgSz36NW2SPKg8W8AjLSpgON7mMGQVafz3b6myEtyebpg14QWX5AUVfyxdFXlxo0MENlN-yr3xBZP7XnnL0E8ox2fJLL9qXdPOcpWi2WMns9trCGgf1whJkLcmKBFRVN6Q_rSclFibkXWu3WN8WQCmR6TrZedh1sWA9p1WM-PHDj_7cKK4WqUR7l7HDN5HkOLeGzV96R9TDjArbfSXOp5WViSVWmH7MIIK4r7uUzUYGNBpG"/>
+</div>
+</div>
+</header>
+<!-- Page Header -->
+<div class="px-margin-desktop py-lg flex justify-between items-end shrink-0">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Maintenance Board</h2>
+<p class="font-body-sm text-body-sm text-secondary mt-1">Manage and track asset repair workflows.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-4 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant text-secondary font-label-lg text-label-lg flex items-center gap-sm hover:bg-surface-container-low shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+                </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center gap-sm hover:bg-primary-fixed-variant transition-colors shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+<span class="material-symbols-outlined text-[18px]">add</span> New Ticket
+                </button>
+</div>
+</div>
+<!-- Kanban Board Area -->
+<div class="flex-1 overflow-x-auto overflow-y-hidden px-margin-desktop pb-lg kanban-scroll">
+<div class="flex h-full gap-lg min-w-max items-start">
+<!-- Column: Pending -->
+<div class="w-[320px] max-h-full flex flex-col bg-surface-container-low rounded-xl border border-outline-variant shadow-sm">
+<div class="p-md flex items-center justify-between border-b border-outline-variant shrink-0 bg-surface-container">
+<div class="flex items-center gap-sm">
+<h3 class="font-label-lg text-label-lg font-semibold text-on-surface">Pending</h3>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">3</span>
+</div>
+<button class="text-secondary hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_horiz</span></button>
+</div>
+<div class="p-sm flex-1 overflow-y-auto kanban-scroll flex flex-col gap-sm" ondragover="allowDrop(event)" ondrop="drop(event)">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.05)] transition-shadow cursor-grab active:cursor-grabbing" draggable="true" id="card1" ondragstart="drag(event)">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">#MNT-8902</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">HVAC Unit B Failure</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-2 mb-4">Complete loss of cooling in Server Room 3. Temperature rising rapidly.</p>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border border-surface-container-lowest object-cover" data-alt="Small avatar of an operations manager looking concerned in an office environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMzoVaq9lb9He9V4U1ZFyRrNI_Lc3-65Upr8DDZ5uEXzNcoEv7WrKxAt4gTjtl1_oK1h_hdDGXf52K9y_lewDYGX-QuCce3o5Zn6RnC0y825khrEN5Av1MiGWWk5I3EMbfzpa8N6IGBgr3ygGXHzIODmwyo5QL-doCg_YO1HSBt8k16QQdsRrtcoztQaaCJ-H07A00flNeA_Sd3SU9LLEoXfz4aUMKhTrprJrLeigWdc21zEc_TFXf" title="Reported by J. Doe"/>
+</div>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 10m ago
+                                </span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.05)] transition-shadow cursor-grab active:cursor-grabbing" draggable="true" id="card2" ondragstart="drag(event)">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">#MNT-8895</span>
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Medium</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">Forklift #4 Battery</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-2 mb-4">Battery not holding charge for full shift. Requires diagnostic check.</p>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border border-surface-container-lowest object-cover" data-alt="Small avatar of a warehouse worker wearing a safety vest." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8D3Y-w2nPSgvu4VcwSJXpo6-5IFPlwRW-wJKThdGirmXbjbUciIDanJbE5OUbMOE8UfAEuzYu26jgYvdeB8S--iocuuencYPNISzyye-w6mqrhsyftB4Ml99gHlgie9iiVv0YcVgG8Of6jpDnUGpUO3U4JUvzm9IhrKTbb-3VU-wePTu047DUASNg4gq2IXv_OQ2Ym-ftqU51zBu3l_Z2ej7VIzYkIC-U6b1uxK-MbiKEzIQ7P-f9" title="Reported by A. Smith"/>
+</div>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 2h ago
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Approved -->
+<div class="w-[320px] max-h-full flex flex-col bg-surface-container-low rounded-xl border border-outline-variant shadow-sm">
+<div class="p-md flex items-center justify-between border-b border-outline-variant shrink-0 bg-surface-container">
+<div class="flex items-center gap-sm">
+<h3 class="font-label-lg text-label-lg font-semibold text-on-surface">Approved</h3>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">1</span>
+</div>
+<button class="text-secondary hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_horiz</span></button>
+</div>
+<div class="p-sm flex-1 overflow-y-auto kanban-scroll flex flex-col gap-sm" ondragover="allowDrop(event)" ondrop="drop(event)">
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.05)] transition-shadow cursor-grab active:cursor-grabbing border-l-4 border-l-secondary" draggable="true" id="card3" ondragstart="drag(event)">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">#MNT-8850</span>
+<span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Low</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">Office Chair Repair</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-2 mb-4">Pneumatic cylinder leaking on chair in cubicle 4B.</p>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface-container-lowest bg-surface-variant flex items-center justify-center text-label-sm text-secondary font-bold">JD</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Apprv
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Tech Assigned -->
+<div class="w-[320px] max-h-full flex flex-col bg-surface-container-low rounded-xl border border-outline-variant shadow-sm">
+<div class="p-md flex items-center justify-between border-b border-outline-variant shrink-0 bg-surface-container">
+<div class="flex items-center gap-sm">
+<h3 class="font-label-lg text-label-lg font-semibold text-on-surface">Tech Assigned</h3>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">2</span>
+</div>
+<button class="text-secondary hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_horiz</span></button>
+</div>
+<div class="p-sm flex-1 overflow-y-auto kanban-scroll flex flex-col gap-sm" ondragover="allowDrop(event)" ondrop="drop(event)">
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.05)] transition-shadow cursor-grab active:cursor-grabbing border-l-4 border-l-primary" draggable="true" id="card4" ondragstart="drag(event)">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">#MNT-8890</span>
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Medium</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">Conveyor Belt Jam</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-2 mb-4">Section C roller alignment is off, causing frequent jams during heavy load.</p>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant">
+<div class="flex gap-2 items-center">
+<img class="w-6 h-6 rounded-full border border-surface-container-lowest object-cover" data-alt="Small avatar of an engineer in a hard hat." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9DrC5maj2JdqLXVhPAu1nRQ-7e1d86NWcBWsJRHGlvHxum5Uuh_qqukgbAcsaYzIUEr6ZAm9UJ-2FXXuHh8aEON8PGICou6RR9yOSlDBi80pEcR0XTBOGFirdxtUjTUtnWTq8ypVKc_SFVOmzr7IwX5UBgel-7pg2kE5nPzH_cR0rvTvKuthpM_KgYBEHHyHeB5nG18jnzMIoavJv8127OGvgwH2QiEj6OrWuf-ZGFscvTsW3Pxu1" title="Assigned to M. Rivera"/>
+<span class="font-label-sm text-label-sm text-primary">M. Rivera</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="w-[320px] max-h-full flex flex-col bg-surface-container-low rounded-xl border border-outline-variant shadow-sm">
+<div class="p-md flex items-center justify-between border-b border-outline-variant shrink-0 bg-surface-container">
+<div class="flex items-center gap-sm">
+<h3 class="font-label-lg text-label-lg font-semibold text-on-surface">In Progress</h3>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">1</span>
+</div>
+<button class="text-secondary hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_horiz</span></button>
+</div>
+<div class="p-sm flex-1 overflow-y-auto kanban-scroll flex flex-col gap-sm" ondragover="allowDrop(event)" ondrop="drop(event)">
+<!-- Card 5 -->
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.05)] transition-shadow cursor-grab active:cursor-grabbing border-l-4 border-l-surface-tint" draggable="true" id="card5" ondragstart="drag(event)">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">#MNT-8812</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Critical</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">Generator Maintenance</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-2 mb-4">Routine 500-hour service interval. Replacing filters and checking coolant.</p>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-1.5 mb-3">
+<div class="bg-surface-tint h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant">
+<div class="flex gap-2 items-center">
+<div class="w-6 h-6 rounded-full border border-surface-container-lowest bg-surface-tint text-on-primary flex items-center justify-center text-label-sm font-bold">DK</div>
+</div>
+<span class="font-label-sm text-label-sm text-surface-tint flex items-center gap-1 animate-pulse">
+<span class="material-symbols-outlined text-[14px]">sync</span> Working
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Resolved -->
+<div class="w-[320px] max-h-full flex flex-col bg-surface-container-low rounded-xl border border-outline-variant shadow-sm opacity-80">
+<div class="p-md flex items-center justify-between border-b border-outline-variant shrink-0 bg-surface-container">
+<div class="flex items-center gap-sm">
+<h3 class="font-label-lg text-label-lg font-semibold text-on-surface">Resolved</h3>
+<span class="bg-surface-variant text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">12</span>
+</div>
+<button class="text-secondary hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_horiz</span></button>
+</div>
+<div class="p-sm flex-1 overflow-y-auto kanban-scroll flex flex-col gap-sm" ondragover="allowDrop(event)" ondrop="drop(event)">
+<!-- Card 6 -->
+<div class="bg-surface-container-lowest p-md rounded-lg border border-outline-variant shadow-[0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.05)] transition-shadow cursor-grab active:cursor-grabbing border-l-4 border-l-outline" draggable="true" id="card6" ondragstart="drag(event)">
+<div class="flex justify-between items-start mb-2 opacity-60">
+<span class="font-label-sm text-label-sm text-secondary line-through">#MNT-8799</span>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Low</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 opacity-60">Replace Lighting Ballast</h4>
+<div class="flex justify-between items-center pt-3 mt-3 border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Closed Today
+                                </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Drag and Drop Script for UI Demonstration -->
+<script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            ev.target.style.opacity = '0.5';
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var dropzone = ev.currentTarget;
+            
+            // Remove highlighting from all columns
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+            
+            var element = document.getElementById(data);
+            element.style.opacity = '1';
+            
+            if (dropzone.classList.contains('gap-sm')) {
+                dropzone.appendChild(element);
+                
+                // Simulate Backend Confirmation Toast
+                showToast("State transition requested. Awaiting backend confirmation...");
+            }
+        }
+
+        // Handle drag leave
+        document.querySelectorAll('.p-sm').forEach(zone => {
+            zone.addEventListener('dragleave', (e) => {
+                e.currentTarget.classList.remove('drag-over');
+            });
+        });
+        
+        document.addEventListener('dragend', (e) => {
+             e.target.style.opacity = '1';
+             document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        });
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-lg right-lg bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-lg shadow-lg font-body-sm text-body-sm z-50 flex items-center gap-sm transform translate-y-full opacity-0 transition-all duration-300';
+            toast.innerHTML = `<span class="material-symbols-outlined text-[18px]">sync</span> ${message}`;
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-y-full', 'opacity-0');
+            }, 100);
+            
+            // Animate out
+            setTimeout(() => {
+                toast.classList.add('translate-y-full', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body></html>

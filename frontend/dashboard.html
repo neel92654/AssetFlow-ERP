@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AssetFlow - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-tint": "#0053db",
+                    "on-surface": "#191b23",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary": "#943700",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#eeefff",
+                    "surface-variant": "#e1e2ed",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00174b",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "inverse-on-surface": "#f0f0fb",
+                    "surface-container": "#ededf9",
+                    "surface-container-high": "#e7e7f3",
+                    "primary-container": "#2563eb",
+                    "outline-variant": "#c3c6d7",
+                    "primary-fixed": "#dbe1ff",
+                    "surface": "#faf8ff",
+                    "surface-container-low": "#f3f3fe",
+                    "surface-dim": "#d9d9e5",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#d0e1fb",
+                    "surface-bright": "#faf8ff",
+                    "on-tertiary-fixed": "#360f00",
+                    "secondary": "#505f76",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#bc4800",
+                    "on-secondary-fixed": "#0b1c30",
+                    "background": "#faf8ff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-container": "#ffede6",
+                    "inverse-surface": "#2e3039",
+                    "on-secondary-container": "#54647a",
+                    "on-background": "#191b23",
+                    "outline": "#737686",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "on-surface-variant": "#434655",
+                    "primary": "#004ac6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "2xl": "48px",
+                    "sm": "8px",
+                    "unit": "4px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "gutter": "16px",
+                    "xs": "4px",
+                    "margin-desktop": "32px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .shadow-level-2 {
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background flex min-h-screen">
+<!-- SideNavBar -->
+<nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 z-40 py-lg bg-surface-container-low dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline">
+<div class="px-md mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-on-surface" onclick="window.location.href='dashboard.html'" style=" cursor: pointer;">AssetFlow</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise EAM</p>
+</div>
+</div>
+<ul class="flex flex-col gap-unit flex-grow">
+<li>
+<a class="flex items-center gap-md bg-secondary-fixed dark:bg-on-secondary-fixed-variant text-on-secondary-fixed font-bold border-l-4 border-primary px-md py-sm" href="dashboard.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="organisationsetup.html">
+<span class="material-symbols-outlined">corporate_fare</span>
+<span class="font-label-lg text-label-lg">Organization Setup</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="Assetregistration.html">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-lg text-label-lg">Assets</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="Assetallocation.html">
+<span class="material-symbols-outlined">move_up</span>
+<span class="font-label-lg text-label-lg">Allocation & Transfer</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="resourcebooking.html">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-lg text-label-lg">Resource Booking</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="Maintenancemanagement.html">
+<span class="material-symbols-outlined">build</span>
+<span class="font-label-lg text-label-lg">Maintenance</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="Assetaudit.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-lg text-label-lg">Audit</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="Reportandanalysis.html">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-lg text-label-lg">Reports</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-surface-variant px-md py-sm hover:bg-surface-container-high transition-all duration-200 border-l-4 border-transparent" href="Activitylogs.html">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-lg text-label-lg">Notifications</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-md pt-md border-t border-outline-variant flex flex-col gap-unit">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-label-lg text-label-lg">Help</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-grow flex flex-col lg:ml-64 w-full">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-lg h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-sm lg:hidden">
+<button class="text-on-surface-variant hover:bg-surface-container p-sm rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed" onclick="window.location.href='dashboard.html'" style=" cursor: pointer;">AssetFlow</h1>
+</div>
+<div class="hidden lg:block">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Today's Overview</h2>
+</div>
+<div class="flex items-center gap-md">
+<button class="relative p-sm text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center cursor-pointer border border-outline-variant overflow-hidden" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXEzZlsQgSz36NW2SPKg8W8AjLSpgON7mMGQVafz3b6myEtyebpg14QWX5AUVfyxdFXlxo0MENlN-yr3xBZP7XnnL0E8ox2fJLL9qXdPOcpWi2WMns9trCGgf1whJkLcmKBFRVN6Q_rSclFibkXWu3WN8WQCmR6TrZedh1sWA9p1WM-PHDj_7cKK4WqUR7l7HDN5HkOLeGzV96R9TDjArbfSXOp5WViSVWmH7MIIK4r7uUzUYGNBpG"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="p-margin-mobile md:p-margin-desktop flex-grow flex flex-col gap-xl">
+<div class="lg:hidden">
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">Today's Overview</h2>
+</div>
+<!-- Alert Banner -->
+<div class="bg-error-container text-on-error-container p-md rounded-xl border border-error/20 flex items-center gap-md shadow-sm">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<p class="font-body-md text-body-md font-medium">3 assets are overdue for return and require immediate follow-up</p>
+<button class="ml-auto font-label-md text-label-md bg-error text-on-error px-sm py-unit rounded-md hover:bg-error/90 transition-colors">View</button>
+</div>
+<!-- Quick Actions -->
+<div class="flex flex-wrap gap-md">
+<button class="bg-primary text-on-primary font-label-lg text-label-lg px-md py-sm rounded-lg shadow-level-2 hover:bg-primary/90 transition-colors flex items-center gap-sm" onclick="window.location.href='Assetregistration.html'">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    Register Asset
+                </button>
+<button class="bg-primary text-on-primary font-label-lg text-label-lg px-md py-sm rounded-lg shadow-level-2 hover:bg-primary/90 transition-colors flex items-center gap-sm" onclick="window.location.href='resourcebooking.html'">
+<span class="material-symbols-outlined text-[18px]">event_available</span>
+                    Book Resource
+                </button>
+<button class="bg-primary text-on-primary font-label-lg text-label-lg px-md py-sm rounded-lg shadow-level-2 hover:bg-primary/90 transition-colors flex items-center gap-sm" onclick="window.location.href='Maintenancemanagement.html'">
+<span class="material-symbols-outlined text-[18px]">build</span>
+                    Raise Maintenance Request
+                </button>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- KPI Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-level-2 flex flex-col gap-sm" onclick="window.location.href='Assetregistration.html'" style="cursor: pointer;">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Assets Available</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">inventory</span>
+</div>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-surface">128</span>
+<span class="font-label-sm text-label-sm text-green-600 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 4%</span>
+</div>
+</div>
+<!-- KPI Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-level-2 flex flex-col gap-sm" onclick="window.location.href='Assetallocation.html'" style="cursor: pointer;">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Allocated Assets</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">how_to_reg</span>
+</div>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-surface">76</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Active</span>
+</div>
+</div>
+<!-- KPI Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-level-2 flex flex-col gap-sm" onclick="window.location.href='Maintenancemanagement.html'" style="cursor: pointer;">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Maintenance Today</span>
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center text-on-error-container">
+<span class="material-symbols-outlined text-[18px]">build</span>
+</div>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-surface">4</span>
+<span class="font-label-sm text-label-sm text-red-600 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 2</span>
+</div>
+</div>
+<!-- KPI Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-level-2 flex flex-col gap-sm" onclick="window.location.href='resourcebooking.html'" style="cursor: pointer;">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Bookings</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+</div>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-surface">9</span>
+</div>
+</div>
+<!-- KPI Card 5 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-level-2 flex flex-col gap-sm" onclick="window.location.href='Assetallocation.html'" style="cursor: pointer;">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Pending Transfers</span>
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-[18px]">sync_alt</span>
+</div>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-surface">3</span>
+</div>
+</div>
+<!-- KPI Card 6 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-level-2 flex flex-col gap-sm" onclick="window.location.href='Assetallocation.html'" style="cursor: pointer;">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Upcoming Returns</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[18px]">keyboard_return</span>
+</div>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-surface">12</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Next 48h</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-level-2 overflow-hidden flex flex-col">
+<div class="p-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Recent Activity</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="flex flex-col">
+<!-- Activity Item 1 -->
+<div class="p-md flex gap-md items-start border-b border-outline-variant hover:bg-surface-container-lowest transition-colors group" onclick="window.location.href='Assetregistration.html'" style="cursor: pointer;">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0 mt-xs">
+<span class="material-symbols-outlined text-[20px]">laptop_mac</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-lg text-label-lg text-on-surface">Laptop AF-0114 allocated to Priya Shah</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Allocation complete for new joiner onboarding.</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">10 min ago</span>
+</div>
+<!-- Activity Item 2 -->
+<div class="p-md flex gap-md items-start border-b border-outline-variant hover:bg-surface-container-lowest transition-colors group" onclick="window.location.href='resourcebooking.html'" style="cursor: pointer;">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0 mt-xs">
+<span class="material-symbols-outlined text-[20px]">meeting_room</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-lg text-label-lg text-on-surface">Room B2 booking confirmed</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Booked by Marketing Team for Q3 Planning.</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">45 min ago</span>
+</div>
+<!-- Activity Item 3 -->
+<div class="p-md flex gap-md items-start hover:bg-surface-container-lowest transition-colors group" onclick="window.location.href='Maintenancemanagement.html'" style="cursor: pointer;">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 shrink-0 mt-xs">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-lg text-label-lg text-on-surface">Projector AF-0062 maintenance resolved</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Bulb replacement completed by IT Support.</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">2 hrs ago</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

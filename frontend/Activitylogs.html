@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AssetFlow - Activity Logs & Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#dbe1ff",
+                        "surface-bright": "#faf8ff",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface": "#faf8ff",
+                        "secondary": "#505f76",
+                        "surface-tint": "#0053db",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ededf9",
+                        "on-surface": "#191b23",
+                        "background": "#faf8ff",
+                        "tertiary": "#943700",
+                        "secondary-fixed": "#d3e4fe",
+                        "outline-variant": "#c3c6d7",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-background": "#191b23",
+                        "on-surface-variant": "#434655",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-variant": "#e1e2ed",
+                        "on-primary-container": "#eeefff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "tertiary-container": "#bc4800",
+                        "on-primary-fixed": "#00174b",
+                        "inverse-surface": "#2e3039",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d9d9e5",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary-fixed": "#360f00",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3fe",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737686"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low text-primary docked left-0 h-full w-64 border-r border-outline-variant flat no shadows fixed left-0 top-0 bottom-0 flex flex-col w-64 z-40 py-lg hidden md:flex">
+<div class="px-lg pb-xl flex flex-col items-start gap-xs">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-black text-on-surface" onclick="window.location.href='dashboard.html'" style=" cursor: pointer;">AssetFlow</h1>
+<p class="font-label-sm text-label-sm text-secondary">Enterprise EAM</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-sm space-y-xs overflow-y-auto">
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="dashboard.html">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="organisationsetup.html">
+<span class="material-symbols-outlined">corporate_fare</span> Organization
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="Assetregistration.html">
+<span class="material-symbols-outlined">contact_page</span> Directory
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="Assetallocation.html">
+<span class="material-symbols-outlined">account_tree</span> Allocations
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="resourcebooking.html">
+<span class="material-symbols-outlined">event_available</span> Booking
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="Maintenancemanagement.html">
+<span class="material-symbols-outlined">build</span> Maintenance
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="Assetaudit.html">
+<span class="material-symbols-outlined">fact_check</span> Audits
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="Reportandanalysis.html">
+<span class="material-symbols-outlined">assessment</span> Reports
+            </a>
+<a class="flex items-center gap-sm bg-primary-container text-on-primary-container rounded-lg px-md py-sm font-bold border-l-4 border-primary hover:bg-surface-container-highest transition-all scale-[0.99] duration-100 font-label-lg text-label-lg" href="Activitylogs.html">
+<span class="material-symbols-outlined">history</span> Logs
+            </a>
+</nav>
+<div class="mt-auto px-sm pt-md border-t border-outline-variant space-y-xs">
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined">contact_support</span> Support
+            </a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<span class="material-symbols-outlined">logout</span> Sign Out
+            </a>
+</div>
+</aside>
+<div class="flex-1 flex flex-col md:ml-64 w-full">
+<!-- TopNavBar -->
+<header class="bg-surface-container-lowest text-primary docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<button class="md:hidden text-on-surface-variant hover:bg-surface-container-low transition-colors rounded p-sm flex items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-md py-sm gap-sm text-on-surface-variant w-64 border border-outline-variant focus-within:border-primary focus-within:ring-2 focus-within:ring-primary-fixed-dim transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 outline-none w-full font-body-sm text-body-sm p-0 m-0 text-on-surface" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="text-headline-md font-headline-md font-bold text-primary md:hidden">AssetFlow</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full p-sm flex items-center justify-center relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full p-sm flex items-center justify-center hidden sm:flex">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full p-sm flex items-center justify-center hidden sm:flex">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container overflow-hidden ml-sm border border-outline-variant cursor-pointer">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of an individual in a corporate setting. The lighting is bright and modern, creating a clear, crisp portrait suitable for an enterprise user profile avatar. Soft white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXEzZlsQgSz36NW2SPKg8W8AjLSpgON7mMGQVafz3b6myEtyebpg14QWX5AUVfyxdFXlxo0MENlN-yr3xBZP7XnnL0E8ox2fJLL9qXdPOcpWi2WMns9trCGgf1whJkLcmKBFRVN6Q_rSclFibkXWu3WN8WQCmR6TrZedh1sWA9p1WM-PHDj_7cKK4WqUR7l7HDN5HkOLeGzV96R9TDjArbfSXOp5WViSVWmH7MIIK4r7uUzUYGNBpG"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop overflow-hidden flex flex-col h-[calc(100vh-64px)]">
+<div class="flex items-center justify-between mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Activity Logs</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-unit">Monitor system events and notifications</p>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container-lowest border border-outline-variant text-on-surface font-label-md text-label-md px-md py-sm rounded-lg hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-xs" onclick="markAllRead()">
+<span class="material-symbols-outlined" style="font-size: 16px;">done_all</span> Mark All Read
+                    </button>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-lg flex-1 overflow-hidden">
+<!-- Left: Categories -->
+<div class="w-full md:w-64 flex-shrink-0 flex flex-col gap-sm overflow-y-auto pr-sm pb-lg md:pb-0" id="categoryList">
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold text-left transition-colors category-btn" data-category="all" onclick="filterByCategory('all', this)">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">format_list_bulleted</span> All Activity
+                        </div>
+<span class="bg-surface-container-lowest text-on-surface px-unit py-px rounded text-[10px]">124</span>
+</button>
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg hover:bg-surface-container text-on-surface-variant font-label-md text-label-md text-left transition-colors category-btn" data-category="approvals" onclick="filterByCategory('approvals', this)">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">fact_check</span> Approvals
+                        </div>
+<span class="bg-surface-container-high text-on-surface-variant px-unit py-px rounded text-[10px]">12</span>
+</button>
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg hover:bg-surface-container text-on-surface-variant font-label-md text-label-md text-left transition-colors category-btn" data-category="transfers" onclick="filterByCategory('transfers', this)">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">swap_horiz</span> Transfers
+                        </div>
+<span class="bg-surface-container-high text-on-surface-variant px-unit py-px rounded text-[10px]">5</span>
+</button>
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg hover:bg-surface-container text-on-surface-variant font-label-md text-label-md text-left transition-colors category-btn" data-category="maintenance" onclick="filterByCategory('maintenance', this)">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">build</span> Maintenance
+                        </div>
+<span class="bg-surface-container-high text-on-surface-variant px-unit py-px rounded text-[10px]">28</span>
+</button>
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg hover:bg-surface-container text-on-surface-variant font-label-md text-label-md text-left transition-colors category-btn" data-category="booking" onclick="filterByCategory('booking', this)">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">event</span> Booking
+                        </div>
+<span class="bg-surface-container-high text-on-surface-variant px-unit py-px rounded text-[10px]">41</span>
+</button>
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg hover:bg-surface-container text-on-surface-variant font-label-md text-label-md text-left transition-colors category-btn" data-category="audits" onclick="filterByCategory('audits', this)">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">policy</span> Audits
+                        </div>
+<span class="bg-surface-container-high text-on-surface-variant px-unit py-px rounded text-[10px]">3</span>
+</button>
+<button class="flex items-center justify-between w-full px-md py-sm rounded-lg hover:bg-surface-container text-on-surface-variant font-label-md text-label-md text-left transition-colors category-btn" data-category="alerts" onclick="filterByCategory('alerts', this)">
+<div class="flex items-center gap-sm text-error">
+<span class="material-symbols-outlined" style="font-size: 18px;">warning</span> Alerts
+                        </div>
+<span class="bg-error-container text-on-error-container px-unit py-px rounded text-[10px] font-bold">15</span>
+</button>
+</div>
+<!-- Right: Timeline -->
+<div class="flex-1 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm flex flex-col overflow-hidden">
+<!-- Filters/Search Bar -->
+<div class="p-md border-b border-outline-variant flex flex-col sm:flex-row gap-sm justify-between bg-surface-bright">
+<div class="flex items-center bg-surface-container-lowest rounded-lg px-md py-unit gap-sm text-on-surface-variant flex-1 max-w-md border border-outline-variant focus-within:border-primary focus-within:ring-2 focus-within:ring-primary-fixed-dim transition-all">
+<span class="material-symbols-outlined text-outline" style="font-size: 20px;">search</span>
+<input class="bg-transparent border-none focus:ring-0 outline-none w-full font-body-sm text-body-sm p-0 py-1 m-0 text-on-surface" id="logSearchInput" oninput="filterLogs()" placeholder="Search logs..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container-lowest border border-outline-variant text-on-surface font-label-md text-label-md px-md py-sm rounded-lg hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-xs" id="filterToggleBtn" onclick="toggleFilterHint()">
+<span class="material-symbols-outlined" style="font-size: 16px;">filter_list</span> Filter
+                            </button>
+<button class="bg-surface-container-lowest border border-outline-variant text-on-surface font-label-md text-label-md px-md py-sm rounded-lg hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-xs" id="dateToggleBtn" onclick="toggleFilterHint()">
+<span class="material-symbols-outlined" style="font-size: 16px;">calendar_month</span> Date
+                            </button>
+</div>
+</div>
+<!-- Timeline Content -->
+<div class="flex-1 overflow-y-auto p-lg relative">
+<!-- Timeline Line -->
+<div class="absolute left-[40px] top-lg bottom-lg w-px bg-outline-variant hidden sm:block"></div>
+<div class="space-y-lg" id="logTimeline">
+<!-- Unread Alert Log -->
+<div class="flex gap-md relative bg-error-container/20 p-md rounded-lg border border-error-container/50 -ml-md -mr-md sm:m-0 sm:bg-transparent sm:p-0 sm:border-none sm:rounded-none transition-colors hover:bg-surface-container-low/50 cursor-pointer log-item" data-category="alerts" data-search="critical temperature alert hvac unit b-04 exceeded operational threshold automatic shutdown system facility alpha" data-target="Maintenancemanagement.html" onclick="navigateToLog(event, 'Maintenancemanagement.html')">
+<div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0 z-10 border-4 border-surface-container-lowest sm:border-none">
+<span class="material-symbols-outlined" style="font-size: 20px;">warning</span>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row gap-sm sm:gap-md justify-between bg-surface-container-lowest sm:border sm:border-outline-variant sm:shadow-sm p-md rounded-xl sm:ml-md relative">
+<div class="absolute -left-2 top-4 w-4 h-4 bg-surface-container-lowest border-l border-t border-outline-variant rotate-45 hidden sm:block z-0"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-sm mb-unit">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">Critical Temperature Alert</h4>
+<span class="bg-error text-on-error font-label-sm text-label-sm px-2 py-0.5 rounded uppercase tracking-wider text-[10px] unread-badge">Unread</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">HVAC Unit B-04 exceeded operational threshold (85°C). Automatic shutdown initiated.</p>
+<div class="flex items-center gap-xs mt-sm text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined" style="font-size: 14px;">person</span> System
+                                            <span class="w-1 h-1 bg-outline rounded-full mx-xs"></span>
+<span class="material-symbols-outlined" style="font-size: 14px;">location_on</span> Facility Alpha
+                                        </div>
+</div>
+<div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-unit flex-shrink-0 relative z-10">
+<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap">10 mins ago</span>
+<button class="text-primary hover:bg-primary-container/20 p-xs rounded transition-colors mark-read-btn" title="Mark as Read" onclick="markAsRead(event, this)">
+<span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Standard Log -->
+<div class="flex gap-md relative group transition-colors cursor-pointer log-item" data-category="approvals" data-search="purchase order approved po-2023-881 server rack components sarah jenkins it dept" data-target="Assetregistration.html" onclick="navigateToLog(event, 'Assetregistration.html')">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0 z-10 border-4 border-surface-container-lowest sm:border-none hidden sm:flex">
+<span class="material-symbols-outlined" style="font-size: 20px;">fact_check</span>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row gap-sm sm:gap-md justify-between bg-surface-container-lowest sm:border sm:border-outline-variant sm:shadow-sm p-md rounded-xl sm:ml-md relative group-hover:bg-surface-container-low transition-colors">
+<div class="absolute -left-2 top-4 w-4 h-4 bg-surface-container-lowest border-l border-t border-outline-variant rotate-45 hidden sm:block z-0 group-hover:bg-surface-container-low transition-colors"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-sm mb-unit">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Purchase Order Approved</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">PO-2023-881 for Server Rack Components was approved.</p>
+<div class="flex items-center gap-xs mt-sm text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined" style="font-size: 14px;">person</span> Sarah Jenkins
+                                            <span class="w-1 h-1 bg-outline rounded-full mx-xs"></span>
+<span class="material-symbols-outlined" style="font-size: 14px;">tag</span> IT Dept
+                                        </div>
+</div>
+<div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-unit flex-shrink-0 relative z-10">
+<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap">2 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="p-sm border-t border-outline-variant bg-surface-bright flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+<div id="paginationLabel">Showing 1-10 of 124 logs</div>
+<div class="flex gap-xs" id="paginationControls">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-container disabled:opacity-50" disabled="" id="prevPageBtn" onclick="goToPage(currentPage - 1)">
+<span class="material-symbols-outlined" style="font-size: 18px;">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary flex items-center justify-center font-bold page-btn" data-page="1" onclick="goToPage(1)">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-container page-btn" data-page="2" onclick="goToPage(2)">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-container page-btn" data-page="3" onclick="goToPage(3)">3</button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center hover:bg-surface-container" id="nextPageBtn" onclick="goToPage(currentPage + 1)">
+<span class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    // Clicking a log entry navigates to its related module; the mark-as-read
+    // button inside a log entry stops that click from bubbling up.
+    function navigateToLog(evt, target) {
+        window.location.href = target;
+    }
+
+    function markAsRead(evt, btn) {
+        evt.stopPropagation();
+        const item = btn.closest('.log-item');
+        if (item) {
+            item.classList.remove('bg-error-container/20', 'border', 'border-error-container/50');
+            const badge = item.querySelector('.unread-badge');
+            if (badge) badge.remove();
+        }
+        btn.remove();
+    }
+
+    function markAllRead() {
+        document.querySelectorAll('.log-item').forEach((item) => {
+            item.classList.remove('bg-error-container/20', 'border', 'border-error-container/50');
+            const badge = item.querySelector('.unread-badge');
+            if (badge) badge.remove();
+            const btn = item.querySelector('.mark-read-btn');
+            if (btn) btn.remove();
+        });
+    }
+
+    let activeCategory = 'all';
+
+    function filterByCategory(category, btn) {
+        activeCategory = category;
+        document.querySelectorAll('.category-btn').forEach((b) => {
+            b.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+            b.classList.add('hover:bg-surface-container', 'text-on-surface-variant');
+        });
+        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+        btn.classList.remove('hover:bg-surface-container', 'text-on-surface-variant');
+        filterLogs();
+    }
+
+    function filterLogs() {
+        const query = (document.getElementById('logSearchInput').value || '').trim().toLowerCase();
+        let visibleCount = 0;
+        document.querySelectorAll('.log-item').forEach((item) => {
+            const matchesCategory = activeCategory === 'all' || item.dataset.category === activeCategory;
+            const haystack = item.dataset.search || '';
+            const matchesSearch = query === '' || haystack.includes(query);
+            const visible = matchesCategory && matchesSearch;
+            item.style.display = visible ? '' : 'none';
+            if (visible) visibleCount++;
+        });
+        const label = document.getElementById('paginationLabel');
+        if (label) {
+            label.textContent = visibleCount === 0
+                ? 'No logs match your search'
+                : `Showing 1-${visibleCount} of ${visibleCount} logs`;
+        }
+    }
+
+    function toggleFilterHint() {
+        const search = document.getElementById('logSearchInput');
+        if (search) search.focus();
+    }
+
+    let currentPage = 1;
+    const totalPages = 3;
+
+    function goToPage(page) {
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        document.querySelectorAll('.page-btn').forEach((b) => {
+            const isActive = Number(b.dataset.page) === page;
+            b.classList.toggle('bg-primary', isActive);
+            b.classList.toggle('text-on-primary', isActive);
+            b.classList.toggle('font-bold', isActive);
+            b.classList.toggle('border', !isActive);
+            b.classList.toggle('border-outline-variant', !isActive);
+        });
+        document.getElementById('prevPageBtn').disabled = page === 1;
+        document.getElementById('nextPageBtn').disabled = page === totalPages;
+    }
+</script>
+</body></html>

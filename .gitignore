@@ -1,0 +1,47 @@
+# Python
+
+__pycache__/
+
+*.pyc
+
+*.pyo
+
+*.pyd
+
+*.sqlite3
+
+venv/
+
+.env
+
+.pytest_cache/
+
+instance/
+
+*.log
+
+# Flask
+
+flask_session/
+
+# Uploads
+
+backend/uploads/*
+
+!backend/uploads/.gitkeep
+
+# macOS
+
+.DS_Store
+
+# VS Code
+
+.vscode/
+
+.idea/
+
+# Build
+
+dist/
+
+build/

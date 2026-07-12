@@ -158,6 +158,8 @@
 </div>
 </main>
 <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('loginForm');
             const emailInput = document.getElementById('email');
@@ -169,43 +171,57 @@
             const btnText = document.getElementById('btnText');
             const btnLoading = document.getElementById('btnLoading');
 
-            // Password visibility toggle
             togglePasswordBtn.addEventListener('click', () => {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 visibilityIcon.textContent = type === 'password' ? 'visibility_off' : 'visibility';
             });
 
-            // Form submission simulation
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                
-                // Simple email validation
+
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(emailInput.value)) {
                     emailError.classList.remove('hidden');
                     emailInput.classList.add('border-error');
                     return;
-                } else {
-                    emailError.classList.add('hidden');
-                    emailInput.classList.remove('border-error');
                 }
 
-                // Loading state
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-error');
+
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
                 btnText.classList.add('hidden');
                 btnLoading.classList.remove('hidden');
 
-                // Simulate a login request
-                setTimeout(() => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: emailInput.value.trim(),
+                            password: passwordInput.value,
+                        }),
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Unable to login.');
+                    }
+
                     sessionStorage.setItem('isAuthenticated', 'true');
+                    sessionStorage.setItem('currentUser', JSON.stringify(data.user));
                     window.location.href = 'dashboard.html';
+                } catch (error) {
+                    emailError.textContent = error.message;
+                    emailError.classList.remove('hidden');
+                } finally {
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                     btnText.classList.remove('hidden');
                     btnLoading.classList.add('hidden');
-                }, 2000);
+                }
             });
         });
     </script>

@@ -402,12 +402,12 @@
                                 </h3>
 <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Fill out the details to request a resource.</p>
 </div>
-<form class="space-y-md flex-1 flex flex-col">
+<form class="space-y-md flex-1 flex flex-col" id="bookingForm">
 <!-- Resource Selection -->
 <div class="space-y-unit">
 <label class="font-label-md text-label-md text-on-surface font-semibold">Resource <span class="text-error">*</span></label>
 <div class="relative">
-<select class="w-full bg-surface-bright border border-outline rounded-lg p-sm pl-3 pr-10 text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+<select class="w-full bg-surface-bright border border-outline rounded-lg p-sm pl-3 pr-10 text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer" id="resourceSelect">
 <option disabled="" selected="" value="">Select a resource...</option>
 <optgroup label="Facilities">
 <option>Conf Room A</option>
@@ -428,7 +428,7 @@
 <div class="space-y-unit">
 <label class="font-label-md text-label-md text-on-surface font-semibold">Date <span class="text-error">*</span></label>
 <div class="relative">
-<input class="w-full bg-surface-bright border border-outline rounded-lg p-sm pl-3 pr-10 text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer" type="date" value="2023-10-24"/>
+<input class="w-full bg-surface-bright border border-outline rounded-lg p-sm pl-3 pr-10 text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer" id="bookingDate" type="date"/>
 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">calendar_today</span>
 </div>
 </div>
@@ -437,15 +437,15 @@
 <div class="space-y-unit">
 <label class="font-label-md text-label-md text-on-surface font-semibold">Start Time</label>
 <div class="relative">
-<input class="w-full bg-surface-bright border border-outline rounded-lg p-sm text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary" type="time" value="10:00"/>
+<input class="w-full bg-surface-bright border border-outline rounded-lg p-sm text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary" id="startTime" type="time" value="10:00"/>
 </div>
 </div>
 <div class="space-y-unit">
 <label class="font-label-md text-label-md text-on-surface font-semibold">End Time</label>
 <div class="relative">
 <!-- Styling as error to simulate form validation context related to the conflict -->
-<input class="w-full bg-error-container border border-error rounded-lg p-sm text-on-error-container font-body-md text-body-md focus:ring-2 focus:ring-error focus:border-error" type="time" value="11:30"/>
-<span class="font-label-sm text-label-sm text-error absolute -bottom-5 left-0">Overlaps existing booking.</span>
+<input class="w-full bg-surface-bright border border-outline rounded-lg p-sm text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary" id="endTime" type="time" value="11:30"/>
+<span class="font-label-sm text-label-sm text-error absolute -bottom-5 left-0 hidden" id="bookingError"></span>
 </div>
 </div>
 </div>
@@ -454,22 +454,102 @@
 <!-- Purpose -->
 <div class="space-y-unit flex-1 flex flex-col">
 <label class="font-label-md text-label-md text-on-surface font-semibold">Purpose / Notes</label>
-<textarea class="w-full flex-1 bg-surface-bright border border-outline rounded-lg p-sm text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary resize-none" placeholder="Briefly describe the reason for this booking..." rows="4"></textarea>
+<textarea class="w-full flex-1 bg-surface-bright border border-outline rounded-lg p-sm text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary resize-none" id="bookingPurpose" placeholder="Briefly describe the reason for this booking..." rows="4"></textarea>
 </div>
 <!-- Form Actions -->
 <div class="pt-md mt-auto border-t border-outline-variant flex gap-sm justify-end">
 <button class="px-md py-sm rounded-lg border border-outline text-on-surface hover:bg-surface-container-high font-label-lg text-label-lg transition-colors" type="button">Cancel</button>
 <!-- Button disabled state styling to reflect conflict -->
-<button class="px-md py-sm rounded-lg bg-surface-variant text-outline cursor-not-allowed font-label-lg text-label-lg flex items-center gap-2 transition-colors" disabled="" type="button">
-<span class="material-symbols-outlined text-[18px]">lock</span>
+<button class="px-md py-sm rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center gap-2 transition-colors hover:bg-primary-fixed-variant" id="confirmBooking" type="submit">
+<span class="material-symbols-outlined text-[18px]">event_available</span>
                                         Confirm Booking
                                     </button>
 </div>
-</form>
+<p class="font-body-sm text-body-sm mt-sm text-secondary" id="bookingStatus"></p></form>
 </div>
 </div>
 </div>
 </div>
 </main>
 </div>
+
+<script>
+    const API_BASE_URL = 'http://localhost:5000/api';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const bookingForm = document.getElementById('bookingForm');
+        const resourceSelect = document.getElementById('resourceSelect');
+        const bookingDate = document.getElementById('bookingDate');
+        const startTime = document.getElementById('startTime');
+        const endTime = document.getElementById('endTime');
+        const bookingPurpose = document.getElementById('bookingPurpose');
+        const bookingError = document.getElementById('bookingError');
+        const bookingStatus = document.getElementById('bookingStatus');
+
+        bookingDate.value = new Date().toISOString().slice(0, 10);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/resources`);
+            const resources = await response.json();
+            const grouped = resources.reduce((acc, resource) => {
+                acc[resource.type] = acc[resource.type] || [];
+                acc[resource.type].push(resource);
+                return acc;
+            }, {});
+
+            resourceSelect.innerHTML = '<option disabled selected value="">Select a resource...</option>';
+            Object.entries(grouped).forEach(([type, items]) => {
+                const group = document.createElement('optgroup');
+                group.label = type;
+                items.forEach((item) => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    group.appendChild(option);
+                });
+                resourceSelect.appendChild(group);
+            });
+        } catch (_) {
+            bookingStatus.textContent = 'Unable to load resources. Ensure backend is running.';
+            bookingStatus.classList.add('text-error');
+        }
+
+        bookingForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            bookingError.classList.add('hidden');
+            bookingStatus.textContent = '';
+            bookingStatus.classList.remove('text-error', 'text-primary');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/bookings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        resourceId: Number(resourceSelect.value),
+                        date: bookingDate.value,
+                        startTime: startTime.value,
+                        endTime: endTime.value,
+                        purpose: bookingPurpose.value.trim(),
+                        requestedBy: JSON.parse(sessionStorage.getItem('currentUser') || '{}').name || 'Employee',
+                    }),
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Booking request failed.');
+                }
+
+                bookingStatus.textContent = data.message;
+                bookingStatus.classList.add('text-primary');
+                bookingPurpose.value = '';
+            } catch (error) {
+                bookingError.textContent = error.message;
+                bookingError.classList.remove('hidden');
+                bookingStatus.textContent = 'Could not submit booking.';
+                bookingStatus.classList.add('text-error');
+            }
+        });
+    });
+</script>
+
 </body></html>

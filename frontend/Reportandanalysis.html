@@ -267,7 +267,7 @@
 <!-- CSS Donut Chart Mock -->
 <div class="relative w-40 h-40 rounded-full" style="background: conic-gradient(#004ac6 0% 45%, #2563eb 45% 75%, #b4c5ff 75% 100%);">
 <div class="absolute inset-4 bg-surface-container-lowest rounded-full flex items-center justify-center flex-col">
-<span class="font-headline-lg text-headline-lg font-bold text-on-surface">1.2k</span>
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface" id="reportTotalAssets">--</span>
 <span class="font-label-sm text-label-sm text-on-surface-variant">Total Assets</span>
 </div>
 </div>
@@ -306,7 +306,7 @@
 <div class="bg-primary-container h-full w-[90%]"></div>
 </div>
 </div>
-<div class="mt-md flex gap-md font-label-sm text-label-sm text-on-surface-variant">
+<div class="mt-md flex gap-md font-label-sm text-label-sm text-on-surface-variant"><div id="reportBookings"></div>
 <div class="flex items-center gap-xs"><div class="w-2 h-2 bg-error rounded-full"></div> Unplanned</div>
 <div class="flex items-center gap-xs"><div class="w-2 h-2 bg-primary-container rounded-full"></div> Scheduled</div>
 </div>
@@ -338,4 +338,21 @@
 </div>
 </div>
 </main>
+<script>
+    const API_BASE_URL = 'http://localhost:5000/api';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/reports/summary`);
+            const summary = await response.json();
+            document.getElementById('reportTotalAssets').textContent = summary.totalAssets;
+            const bookingNode = document.getElementById('reportBookings');
+            if (bookingNode) {
+                bookingNode.textContent = `Bookings: ${summary.totalBookings} | Open Maintenance: ${summary.openMaintenance}`;
+            }
+        } catch (_) {
+            document.getElementById('reportTotalAssets').textContent = 'N/A';
+        }
+    });
+</script>
 </body></html>

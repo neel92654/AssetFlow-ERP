@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AssetFlow Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-slate-50 min-h-screen">
+  <script>
+    if (sessionStorage.getItem('isAuthenticated') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+  <main class="max-w-5xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-slate-900 mb-2">AssetFlow Dashboard</h1>
+    <p class="text-slate-600 mb-6">Select a module to continue.</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a class="bg-white border border-slate-200 rounded-xl p-4 hover:shadow" href="organisationsetup.html">Organization Setup</a>
+      <a class="bg-white border border-slate-200 rounded-xl p-4 hover:shadow" href="resourcebooking.html">Resource Booking</a>
+      <a class="bg-white border border-slate-200 rounded-xl p-4 hover:shadow" href="Maintenancemanagement.html">Maintenance</a>
+      <a class="bg-white border border-slate-200 rounded-xl p-4 hover:shadow" href="Reportandanalysis.html">Reports & Analysis</a>
+    </div>
+    <button id="logoutBtn" class="mt-8 px-4 py-2 bg-slate-900 text-white rounded-lg">Logout</button>
+  </main>
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

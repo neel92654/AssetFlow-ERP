@@ -262,7 +262,7 @@
 <option>Inactive</option>
 </select>
 </div>
-<button class="flex items-center gap-sm bg-primary text-on-primary px-md py-sm rounded-lg font-label-lg text-label-lg hover:bg-primary-container transition-colors shadow-[0px_1px_3px_rgba(0,0,0,0.1),0px_1px_2px_rgba(0,0,0,0.06)]">
+<button class="flex items-center gap-sm bg-primary text-on-primary px-md py-sm rounded-lg font-label-lg text-label-lg hover:bg-primary-container transition-colors shadow-[0px_1px_3px_rgba(0,0,0,0.1),0px_1px_2px_rgba(0,0,0,0.06)]" id="addDepartmentBtn">
 <span class="material-symbols-outlined text-[18px]">add</span>
                         Add Department
                     </button>
@@ -280,7 +280,7 @@
 <th class="py-md px-lg font-label-md text-label-md text-secondary uppercase tracking-wider whitespace-nowrap text-right">Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant bg-surface-container-lowest">
+<tbody class="divide-y divide-outline-variant bg-surface-container-lowest" id="departmentTableBody">
 <!-- Row 1 -->
 <tr class="hover:bg-surface-container-low transition-colors group">
 <td class="py-sm px-lg">
@@ -361,7 +361,7 @@
 </div>
 <!-- Pagination Footer -->
 <div class="bg-surface-container-lowest border-t border-outline-variant px-lg py-sm flex items-center justify-between">
-<span class="font-body-sm text-body-sm text-secondary">Showing 1 to 3 of 24 departments</span>
+<span class="font-body-sm text-body-sm text-secondary" id="departmentCountText">Showing 0 departments</span>
 <div class="flex items-center gap-sm">
 <button class="p-unit rounded-md border border-outline-variant text-secondary hover:bg-surface-container-low disabled:opacity-50" disabled="">
 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
@@ -393,22 +393,21 @@
 </div>
 <!-- Simple Tab Switching Logic -->
 <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+
         function switchTab(tabId) {
-            // Arrays of IDs
             const tabs = ['departments', 'categories', 'directory'];
-            
+
             tabs.forEach(id => {
                 const btn = document.getElementById(`tab-btn-${id}`);
                 const content = document.getElementById(`tab-content-${id}`);
-                
+
                 if (id === tabId) {
-                    // Activate
                     btn.classList.remove('text-secondary', 'border-transparent', 'hover:text-on-surface');
                     btn.classList.add('text-primary', 'font-bold', 'border-primary');
                     content.classList.remove('hidden');
                     content.classList.add('block');
                 } else {
-                    // Deactivate
                     btn.classList.remove('text-primary', 'font-bold', 'border-primary');
                     btn.classList.add('text-secondary', 'border-transparent', 'hover:text-on-surface');
                     content.classList.remove('block');
@@ -416,5 +415,62 @@
                 }
             });
         }
+
+        function renderDepartments(departments) {
+            const body = document.getElementById('departmentTableBody');
+            const countText = document.getElementById('departmentCountText');
+
+            body.innerHTML = departments.map((department) => {
+                const statusStyle = department.status.toLowerCase() === 'active'
+                    ? 'bg-secondary-container text-on-secondary-container'
+                    : 'bg-surface-container-highest text-on-surface-variant';
+
+                return `
+                    <tr class="hover:bg-surface-container-low transition-colors group">
+                        <td class="py-sm px-lg"><div class="font-label-lg text-label-lg text-on-surface">${department.name}</div></td>
+                        <td class="py-sm px-lg font-body-md text-body-md text-on-surface">${department.head}</td>
+                        <td class="py-sm px-lg font-body-md text-body-md text-secondary">${department.parentNode || '-'}</td>
+                        <td class="py-sm px-lg"><span class="inline-flex items-center px-sm py-unit rounded-full ${statusStyle} font-label-sm text-label-sm uppercase tracking-wider">${department.status}</span></td>
+                        <td class="py-sm px-lg text-right text-secondary">—</td>
+                    </tr>
+                `;
+            }).join('');
+
+            countText.textContent = `Showing ${departments.length} departments`;
+        }
+
+        async function loadDepartments() {
+            const response = await fetch(`${API_BASE_URL}/organization/departments`);
+            const departments = await response.json();
+            renderDepartments(departments);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const addButton = document.getElementById('addDepartmentBtn');
+
+            try {
+                await loadDepartments();
+            } catch (_) {
+                document.getElementById('departmentCountText').textContent = 'Unable to load departments. Start backend API.';
+            }
+
+            addButton.addEventListener('click', async () => {
+                const name = prompt('Department name');
+                if (!name) return;
+
+                const head = prompt('Department head', 'Unassigned') || 'Unassigned';
+                const parentNode = prompt('Parent node', 'Executive Board') || 'Executive Board';
+
+                const response = await fetch(`${API_BASE_URL}/organization/departments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, head, parentNode, status: 'Active' }),
+                });
+
+                if (response.ok) {
+                    await loadDepartments();
+                }
+            });
+        });
     </script>
 </body></html>

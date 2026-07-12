@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<html class="light" lang="en"><head><script src="js/api.js"></script><script id="auth-check">requireAuth();</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AssetFlow - Asset Directory</title>
@@ -173,7 +173,7 @@
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">contact_support</span>
 <span>Support</span>
 </a>
-<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all rounded-lg" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all rounded-lg" href="javascript:void(0);" onclick="logout();">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
 <span>Sign Out</span>
 </a>
@@ -248,58 +248,8 @@
 <th class="px-md py-sm font-medium text-right">Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant">
-<!-- Row 1 -->
-<tr class="hover:bg-surface-container-low cursor-pointer transition-colors group" onclick="document.getElementById('side-drawer').classList.remove('translate-x-full')">
-<td class="px-md py-3 font-label-md text-on-surface">#AST-4092</td>
-<td class="px-md py-3">MacBook Pro 16" (M2 Max)</td>
-<td class="px-md py-3 text-secondary">Hardware / IT</td>
-<td class="px-md py-3">
-<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm">Active</span>
-</td>
-<td class="px-md py-3">Engineering</td>
-<td class="px-md py-3 text-secondary">SF-HQ Floor 3</td>
-<td class="px-md py-3 flex items-center gap-2">
-<div class="w-6 h-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-label-sm">JS</div>
-                                    Jane Smith
-                                </td>
-<td class="px-md py-3 text-right">
-<button class="p-1 text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
-</td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-surface-container-low cursor-pointer transition-colors group" onclick="document.getElementById('side-drawer').classList.remove('translate-x-full')">
-<td class="px-md py-3 font-label-md text-on-surface">#AST-4105</td>
-<td class="px-md py-3">Herman Miller Aeron Chair</td>
-<td class="px-md py-3 text-secondary">Furniture</td>
-<td class="px-md py-3">
-<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary font-label-sm">In Storage</span>
-</td>
-<td class="px-md py-3">Facilities</td>
-<td class="px-md py-3 text-secondary">Warehouse A</td>
-<td class="px-md py-3 text-secondary italic">Unassigned</td>
-<td class="px-md py-3 text-right">
-<button class="p-1 text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-surface-container-low cursor-pointer transition-colors group" onclick="document.getElementById('side-drawer').classList.remove('translate-x-full')">
-<td class="px-md py-3 font-label-md text-on-surface">#AST-3890</td>
-<td class="px-md py-3">Dell UltraSharp 27" Monitor</td>
-<td class="px-md py-3 text-secondary">Hardware / IT</td>
-<td class="px-md py-3">
-<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm">Maintenance</span>
-</td>
-<td class="px-md py-3">Design</td>
-<td class="px-md py-3 text-secondary">NY-Office Desk 12</td>
-<td class="px-md py-3 flex items-center gap-2">
-<div class="w-6 h-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-label-sm">MR</div>
-                                    Mark R.
-                                </td>
-<td class="px-md py-3 text-right">
-<button class="p-1 text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
-</td>
-</tr>
+<tbody class="divide-y divide-outline-variant" id="assets-list">
+<!-- Dynamic Rows -->
 </tbody>
 </table>
 </div>
@@ -401,35 +351,123 @@
 <div class="p-lg overflow-y-auto flex-1 flex flex-col gap-md custom-scrollbar">
 <div>
 <label class="block font-label-sm text-secondary mb-unit">Asset Name</label>
-<input class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. Dell XPS 15" type="text"/>
+<input id="asset-name" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. Dell XPS 15" type="text"/>
 </div>
 <div class="grid grid-cols-2 gap-md">
 <div>
 <label class="block font-label-sm text-secondary mb-unit">Category</label>
-<select class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
-<option>Hardware / IT</option>
-<option>Furniture</option>
-<option>Vehicles</option>
+<select id="asset-category" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+<option value="">Select Category</option>
 </select>
 </div>
 <div>
 <label class="block font-label-sm text-secondary mb-unit">Department</label>
-<select class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
-<option>Engineering</option>
-<option>Sales</option>
-<option>Design</option>
+<select id="asset-department" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+<option value="">Select Department</option>
 </select>
 </div>
 </div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-sm text-secondary mb-unit">Serial Number</label>
+<input id="asset-serial" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. SN-123456789" type="text"/>
+</div>
 <div>
 <label class="block font-label-sm text-secondary mb-unit">Initial Location</label>
-<input class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. SF-HQ Floor 2" type="text"/>
+<input id="asset-location" class="w-full px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. SF-HQ Floor 2" type="text"/>
+</div>
 </div>
 </div>
 <div class="p-lg border-t border-outline-variant bg-surface-container-low flex justify-end gap-sm rounded-b-xl">
 <button class="px-md py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-label-md text-on-surface hover:bg-surface-container-high transition-colors" onclick="document.getElementById('register-modal').classList.add('hidden')">Cancel</button>
-<button class="px-md py-2 bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary-container transition-colors" onclick="document.getElementById('register-modal').classList.add('hidden')">Register Asset</button>
+<button id="btn-submit-asset" class="px-md py-2 bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary-container transition-colors">Register Asset</button>
 </div>
 </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadAssets();
+        loadDropdowns();
+    });
+
+    async function loadAssets() {
+        try {
+            const res = await apiFetch('/assets');
+            const tbody = document.getElementById('assets-list');
+            tbody.innerHTML = '';
+            res.data.forEach(asset => {
+                const statusColor = asset.lifecycle_status === 'AVAILABLE' ? 'bg-primary-fixed text-on-primary-fixed-variant' : 'bg-surface-container-highest text-secondary';
+                tbody.innerHTML += `
+                <tr class="hover:bg-surface-container-low cursor-pointer transition-colors group">
+                    <td class="px-md py-3 font-label-md text-on-surface">${asset.asset_tag}</td>
+                    <td class="px-md py-3">${asset.asset_name}</td>
+                    <td class="px-md py-3 text-secondary">${asset.category_name || '-'}</td>
+                    <td class="px-md py-3">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full ${statusColor} font-label-sm">${asset.lifecycle_status}</span>
+                    </td>
+                    <td class="px-md py-3">${asset.department_name || '-'}</td>
+                    <td class="px-md py-3 text-secondary">${asset.location || '-'}</td>
+                    <td class="px-md py-3 text-secondary italic">Unassigned</td>
+                    <td class="px-md py-3 text-right">
+                        <button class="p-1 text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+                    </td>
+                </tr>
+                `;
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadDropdowns() {
+        try {
+            const cats = await apiFetch('/organization/categories');
+            const catSelect = document.getElementById('asset-category');
+            cats.data.forEach(c => {
+                catSelect.innerHTML += `<option value="${c.id}">${c.category_name}</option>`;
+            });
+
+            const depts = await apiFetch('/organization/departments');
+            const deptSelect = document.getElementById('asset-department');
+            depts.data.forEach(d => {
+                deptSelect.innerHTML += `<option value="${d.id}">${d.department_name}</option>`;
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    document.getElementById('btn-submit-asset').addEventListener('click', async () => {
+        const name = document.getElementById('asset-name').value;
+        const serial = document.getElementById('asset-serial').value;
+        const catId = document.getElementById('asset-category').value;
+        const deptId = document.getElementById('asset-department').value;
+        const loc = document.getElementById('asset-location').value;
+
+        if(!name || !serial || !catId || !deptId) {
+            alert('Please fill out all required fields (Name, Serial Number, Category, Department)');
+            return;
+        }
+
+        try {
+            await apiFetch('/assets', {
+                method: 'POST',
+                body: JSON.stringify({
+                    asset_name: name,
+                    serial_number: serial,
+                    category_id: parseInt(catId),
+                    department_id: parseInt(deptId),
+                    location: loc
+                })
+            });
+            document.getElementById('register-modal').classList.add('hidden');
+            // reset form
+            document.getElementById('asset-name').value = '';
+            document.getElementById('asset-serial').value = '';
+            document.getElementById('asset-location').value = '';
+            
+            // Reload
+            loadAssets();
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+</script>
 </body></html>

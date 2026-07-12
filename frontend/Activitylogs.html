@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<html class="light" lang="en"><head><script src="js/api.js"></script><script id="auth-check">requireAuth();</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AssetFlow - Activity Logs & Notifications</title>
@@ -156,7 +156,7 @@
 <a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="#">
 <span class="material-symbols-outlined">contact_support</span> Support
             </a>
-<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<a class="flex items-center gap-sm text-secondary px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-lg text-label-lg" href="javascript:void(0);" onclick="logout();">
 <span class="material-symbols-outlined">logout</span> Sign Out
             </a>
 </div>
@@ -271,56 +271,7 @@
 <!-- Timeline Line -->
 <div class="absolute left-[40px] top-lg bottom-lg w-px bg-outline-variant hidden sm:block"></div>
 <div class="space-y-lg" id="logTimeline">
-<!-- Unread Alert Log -->
-<div class="flex gap-md relative bg-error-container/20 p-md rounded-lg border border-error-container/50 -ml-md -mr-md sm:m-0 sm:bg-transparent sm:p-0 sm:border-none sm:rounded-none transition-colors hover:bg-surface-container-low/50 cursor-pointer log-item" data-category="alerts" data-search="critical temperature alert hvac unit b-04 exceeded operational threshold automatic shutdown system facility alpha" data-target="Maintenancemanagement.html" onclick="navigateToLog(event, 'Maintenancemanagement.html')">
-<div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0 z-10 border-4 border-surface-container-lowest sm:border-none">
-<span class="material-symbols-outlined" style="font-size: 20px;">warning</span>
-</div>
-<div class="flex-1 flex flex-col sm:flex-row gap-sm sm:gap-md justify-between bg-surface-container-lowest sm:border sm:border-outline-variant sm:shadow-sm p-md rounded-xl sm:ml-md relative">
-<div class="absolute -left-2 top-4 w-4 h-4 bg-surface-container-lowest border-l border-t border-outline-variant rotate-45 hidden sm:block z-0"></div>
-<div class="relative z-10">
-<div class="flex items-center gap-sm mb-unit">
-<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">Critical Temperature Alert</h4>
-<span class="bg-error text-on-error font-label-sm text-label-sm px-2 py-0.5 rounded uppercase tracking-wider text-[10px] unread-badge">Unread</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant">HVAC Unit B-04 exceeded operational threshold (85°C). Automatic shutdown initiated.</p>
-<div class="flex items-center gap-xs mt-sm text-secondary font-label-sm text-label-sm">
-<span class="material-symbols-outlined" style="font-size: 14px;">person</span> System
-                                            <span class="w-1 h-1 bg-outline rounded-full mx-xs"></span>
-<span class="material-symbols-outlined" style="font-size: 14px;">location_on</span> Facility Alpha
-                                        </div>
-</div>
-<div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-unit flex-shrink-0 relative z-10">
-<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap">10 mins ago</span>
-<button class="text-primary hover:bg-primary-container/20 p-xs rounded transition-colors mark-read-btn" title="Mark as Read" onclick="markAsRead(event, this)">
-<span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Standard Log -->
-<div class="flex gap-md relative group transition-colors cursor-pointer log-item" data-category="approvals" data-search="purchase order approved po-2023-881 server rack components sarah jenkins it dept" data-target="Assetregistration.html" onclick="navigateToLog(event, 'Assetregistration.html')">
-<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0 z-10 border-4 border-surface-container-lowest sm:border-none hidden sm:flex">
-<span class="material-symbols-outlined" style="font-size: 20px;">fact_check</span>
-</div>
-<div class="flex-1 flex flex-col sm:flex-row gap-sm sm:gap-md justify-between bg-surface-container-lowest sm:border sm:border-outline-variant sm:shadow-sm p-md rounded-xl sm:ml-md relative group-hover:bg-surface-container-low transition-colors">
-<div class="absolute -left-2 top-4 w-4 h-4 bg-surface-container-lowest border-l border-t border-outline-variant rotate-45 hidden sm:block z-0 group-hover:bg-surface-container-low transition-colors"></div>
-<div class="relative z-10">
-<div class="flex items-center gap-sm mb-unit">
-<h4 class="font-headline-sm text-headline-sm text-on-surface">Purchase Order Approved</h4>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant">PO-2023-881 for Server Rack Components was approved.</p>
-<div class="flex items-center gap-xs mt-sm text-secondary font-label-sm text-label-sm">
-<span class="material-symbols-outlined" style="font-size: 14px;">person</span> Sarah Jenkins
-                                            <span class="w-1 h-1 bg-outline rounded-full mx-xs"></span>
-<span class="material-symbols-outlined" style="font-size: 14px;">tag</span> IT Dept
-                                        </div>
-</div>
-<div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-unit flex-shrink-0 relative z-10">
-<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap">2 hours ago</span>
-</div>
-</div>
-</div>
+<!-- Dynamic Logs -->
 </div>
 </div>
 <!-- Pagination -->
@@ -342,87 +293,45 @@
 </div>
 </main>
 </div>
-<script>
-    // Clicking a log entry navigates to its related module; the mark-as-read
-    // button inside a log entry stops that click from bubbling up.
-    function navigateToLog(evt, target) {
-        window.location.href = target;
-    }
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const res = await apiFetch('/dashboard/recent-activity');
+            const timeline = document.getElementById('logTimeline');
+            timeline.innerHTML = '';
+            
+            res.data.forEach(log => {
+                const date = new Date(log.timestamp).toLocaleString();
+                let icon = 'info';
+                if(log.module === 'Auth') icon = 'login';
+                if(log.module === 'Assets') icon = 'inventory_2';
+                if(log.module === 'Maintenance') icon = 'build';
 
-    function markAsRead(evt, btn) {
-        evt.stopPropagation();
-        const item = btn.closest('.log-item');
-        if (item) {
-            item.classList.remove('bg-error-container/20', 'border', 'border-error-container/50');
-            const badge = item.querySelector('.unread-badge');
-            if (badge) badge.remove();
-        }
-        btn.remove();
-    }
-
-    function markAllRead() {
-        document.querySelectorAll('.log-item').forEach((item) => {
-            item.classList.remove('bg-error-container/20', 'border', 'border-error-container/50');
-            const badge = item.querySelector('.unread-badge');
-            if (badge) badge.remove();
-            const btn = item.querySelector('.mark-read-btn');
-            if (btn) btn.remove();
-        });
-    }
-
-    let activeCategory = 'all';
-
-    function filterByCategory(category, btn) {
-        activeCategory = category;
-        document.querySelectorAll('.category-btn').forEach((b) => {
-            b.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
-            b.classList.add('hover:bg-surface-container', 'text-on-surface-variant');
-        });
-        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
-        btn.classList.remove('hover:bg-surface-container', 'text-on-surface-variant');
-        filterLogs();
-    }
-
-    function filterLogs() {
-        const query = (document.getElementById('logSearchInput').value || '').trim().toLowerCase();
-        let visibleCount = 0;
-        document.querySelectorAll('.log-item').forEach((item) => {
-            const matchesCategory = activeCategory === 'all' || item.dataset.category === activeCategory;
-            const haystack = item.dataset.search || '';
-            const matchesSearch = query === '' || haystack.includes(query);
-            const visible = matchesCategory && matchesSearch;
-            item.style.display = visible ? '' : 'none';
-            if (visible) visibleCount++;
-        });
-        const label = document.getElementById('paginationLabel');
-        if (label) {
-            label.textContent = visibleCount === 0
-                ? 'No logs match your search'
-                : `Showing 1-${visibleCount} of ${visibleCount} logs`;
-        }
-    }
-
-    function toggleFilterHint() {
-        const search = document.getElementById('logSearchInput');
-        if (search) search.focus();
-    }
-
-    let currentPage = 1;
-    const totalPages = 3;
-
-    function goToPage(page) {
-        if (page < 1 || page > totalPages) return;
-        currentPage = page;
-        document.querySelectorAll('.page-btn').forEach((b) => {
-            const isActive = Number(b.dataset.page) === page;
-            b.classList.toggle('bg-primary', isActive);
-            b.classList.toggle('text-on-primary', isActive);
-            b.classList.toggle('font-bold', isActive);
-            b.classList.toggle('border', !isActive);
-            b.classList.toggle('border-outline-variant', !isActive);
-        });
-        document.getElementById('prevPageBtn').disabled = page === 1;
-        document.getElementById('nextPageBtn').disabled = page === totalPages;
-    }
+                timeline.innerHTML += `
+                <div class="flex gap-md relative group transition-colors cursor-pointer log-item" data-category="all" data-search="${log.action.toLowerCase()} ${log.description.toLowerCase()}">
+                    <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0 z-10 hidden sm:flex">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">${icon}</span>
+                    </div>
+                    <div class="flex-1 flex flex-col sm:flex-row gap-sm sm:gap-md justify-between bg-surface-container-lowest sm:border sm:border-outline-variant sm:shadow-sm p-md rounded-xl sm:ml-md relative group-hover:bg-surface-container-low transition-colors">
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-sm mb-unit">
+                                <h4 class="font-headline-sm text-on-surface">${log.action}</h4>
+                            </div>
+                            <p class="font-body-sm text-on-surface-variant">${log.description}</p>
+                            <div class="flex items-center gap-xs mt-sm text-secondary font-label-sm">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">person</span> User ${log.user_id}
+                                <span class="w-1 h-1 bg-outline rounded-full mx-xs"></span>
+                                <span class="material-symbols-outlined" style="font-size: 14px;">tag</span> ${log.module}
+                            </div>
+                        </div>
+                        <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-unit flex-shrink-0 relative z-10">
+                            <span class="font-label-sm text-secondary whitespace-nowrap">${date}</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            filterLogs();
+        } catch(e) { console.error(e); }
+    });
 </script>
 </body></html>

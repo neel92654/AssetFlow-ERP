@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<html lang="en"><head><script src="js/api.js"></script><script id="auth-check">requireAuth();</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Asset Audit - AssetFlow</title>
@@ -187,7 +187,7 @@
 <span class="material-symbols-outlined">contact_support</span>
                 Support
             </a>
-<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all rounded-lg font-label-lg text-label-lg" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all rounded-lg font-label-lg text-label-lg" href="javascript:void(0);" onclick="logout();">
 <span class="material-symbols-outlined">logout</span>
                 Sign Out
             </a>
@@ -234,112 +234,58 @@
 <!-- Create Audit Cycle Card -->
 <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
 <h3 class="font-headline-md text-headline-md text-on-surface mb-md">Create Audit Cycle</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<form id="audit-form">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-md">
 <div>
-<label class="block font-label-md text-label-md text-on-surface-variant mb-unit">Assign Auditors</label>
-<input class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="e.g., John Doe" type="text"/>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-unit">Audit Name <span class="text-error">*</span></label>
+<input id="audit-name" class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="Q1 Audit" type="text" required/>
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface-variant mb-unit">Department</label>
-<select class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface">
-<option>IT Infrastructure</option>
-<option>Operations</option>
-<option>Facilities</option>
+<select id="audit-dept" class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface">
+<option value="">Any</option>
 </select>
 </div>
 <div>
 <label class="block font-label-md text-label-md text-on-surface-variant mb-unit">Location</label>
-<select class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface">
-<option>Building A - Floor 2</option>
-<option>Warehouse B</option>
-</select>
+<input id="audit-loc" class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="e.g. Floor 2" type="text"/>
 </div>
 <div>
-<label class="block font-label-md text-label-md text-on-surface-variant mb-unit">Dates</label>
-<input class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface" type="date"/>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-unit">Start Date <span class="text-error">*</span></label>
+<input id="audit-start" class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface" type="date" required/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-unit">End Date <span class="text-error">*</span></label>
+<input id="audit-end" class="w-full px-3 py-2 bg-surface-container rounded-lg border-outline-variant text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface" type="date" required/>
 </div>
 </div>
 <div class="mt-md flex justify-end">
-<button class="bg-primary text-on-primary font-label-lg text-label-lg px-lg py-2 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm">
+<button type="submit" class="bg-primary text-on-primary font-label-lg px-lg py-2 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm">
                             Initialize Audit
                         </button>
 </div>
+</form>
 </section>
 <!-- Audit Checklist Table -->
 <section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
 <div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
 <h3 class="font-headline-sm text-headline-sm text-on-surface">Audit Checklist</h3>
-<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2 py-1 rounded-full">Cycle ID: #AC-2023-04</span>
+<span id="active-cycle-badge" class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2 py-1 rounded-full">No Active Cycle</span>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-surface-container border-b border-outline-variant">
 <th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Asset</th>
-<th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Expected Location</th>
+<th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Location</th>
 <th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Status</th>
 <th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Verification</th>
 <th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Remarks</th>
+<th class="p-sm font-label-md text-label-md text-on-surface-variant font-medium">Action</th>
 </tr>
 </thead>
-<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-outline-variant">
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="p-sm">
-<div class="font-medium">Dell Latitude 7420</div>
-<div class="text-on-surface-variant text-xs">TAG-8921</div>
-</td>
-<td class="p-sm">Desk 42, Floor 2</td>
-<td class="p-sm"><span class="bg-primary-fixed text-on-primary-fixed-variant px-2 py-1 rounded-md text-xs">Assigned</span></td>
-<td class="p-sm">
-<select class="px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none">
-<option>Pending</option>
-<option selected="">Verified</option>
-<option>Missing</option>
-<option>Damaged</option>
-</select>
-</td>
-<td class="p-sm">
-<input class="w-full px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none" placeholder="Add remark..." type="text" value="Condition good"/>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="p-sm">
-<div class="font-medium">Herman Miller Chair</div>
-<div class="text-on-surface-variant text-xs">TAG-8925</div>
-</td>
-<td class="p-sm">Desk 42, Floor 2</td>
-<td class="p-sm"><span class="bg-primary-fixed text-on-primary-fixed-variant px-2 py-1 rounded-md text-xs">In Use</span></td>
-<td class="p-sm">
-<select class="px-2 py-1 bg-error-container text-on-error-container rounded border-outline-variant text-xs focus:border-primary outline-none">
-<option>Pending</option>
-<option>Verified</option>
-<option selected="">Missing</option>
-<option>Damaged</option>
-</select>
-</td>
-<td class="p-sm">
-<input class="w-full px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none" placeholder="Add remark..." type="text" value="Not at desk"/>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors">
-<td class="p-sm">
-<div class="font-medium">Cisco IP Phone</div>
-<div class="text-on-surface-variant text-xs">TAG-8930</div>
-</td>
-<td class="p-sm">Desk 42, Floor 2</td>
-<td class="p-sm"><span class="bg-primary-fixed text-on-primary-fixed-variant px-2 py-1 rounded-md text-xs">Assigned</span></td>
-<td class="p-sm">
-<select class="px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none">
-<option selected="">Pending</option>
-<option>Verified</option>
-<option>Missing</option>
-<option>Damaged</option>
-</select>
-</td>
-<td class="p-sm">
-<input class="w-full px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none" placeholder="Add remark..." type="text"/>
-</td>
-</tr>
+<tbody id="audit-table-body" class="font-body-sm text-body-sm text-on-surface divide-y divide-outline-variant">
+<!-- Dynamic rows -->
 </tbody>
 </table>
 </div>
@@ -369,7 +315,7 @@
 </div>
 <div class="bg-surface-container-low border border-outline-variant rounded-xl p-md flex flex-col justify-center items-center shadow-sm">
 <p class="font-body-sm text-body-sm text-on-surface-variant text-center mb-md">Review all discrepancies before finalizing this audit cycle.</p>
-<button class="w-full bg-on-surface text-surface font-label-lg text-label-lg px-lg py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-sm">
+<button id="close-audit-btn" class="w-full bg-on-surface text-surface font-label-lg px-lg py-3 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-sm disabled:opacity-50">
 <span class="material-symbols-outlined text-[20px]">task_alt</span>
                             Close Audit Cycle
                         </button>
@@ -378,4 +324,131 @@
 </div>
 </main>
 </div>
+<script>
+    let activeCycleId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadDepts();
+        await loadActiveCycle();
+        if(activeCycleId) {
+            await loadAssets();
+        }
+    });
+
+    async function loadDepts() {
+        try {
+            const res = await apiFetch('/organization/departments');
+            const select = document.getElementById('audit-dept');
+            res.data.forEach(d => select.innerHTML += `<option value="${d.id}">${d.department_name}</option>`);
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadActiveCycle() {
+        try {
+            const res = await apiFetch('/audit/cycle');
+            // Find a cycle that is not completed
+            const active = res.data.find(c => c.audit_status === 'PENDING' || c.audit_status === 'IN_PROGRESS');
+            if (active) {
+                activeCycleId = active.id;
+                document.getElementById('active-cycle-badge').textContent = `Cycle ID: #${active.id} - ${active.audit_name}`;
+                document.getElementById('close-audit-btn').disabled = false;
+            } else {
+                document.getElementById('active-cycle-badge').textContent = `No Active Cycle`;
+                document.getElementById('close-audit-btn').disabled = true;
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadAssets() {
+        try {
+            const res = await apiFetch('/assets');
+            const tbody = document.getElementById('audit-table-body');
+            tbody.innerHTML = '';
+            
+            res.data.forEach(a => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-surface-container-low transition-colors';
+                tr.innerHTML = `
+                    <td class="p-sm">
+                        <div class="font-medium">${a.asset_name}</div>
+                        <div class="text-on-surface-variant text-xs">${a.asset_tag}</div>
+                    </td>
+                    <td class="p-sm">${a.location}</td>
+                    <td class="p-sm"><span class="bg-primary-fixed text-on-primary-fixed-variant px-2 py-1 rounded-md text-xs">${a.status}</span></td>
+                    <td class="p-sm">
+                        <select id="ver-${a.id}" class="px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none">
+                            <option value="PENDING">Pending</option>
+                            <option value="VERIFIED">Verified</option>
+                            <option value="MISSING">Missing</option>
+                            <option value="DAMAGED">Damaged</option>
+                        </select>
+                    </td>
+                    <td class="p-sm">
+                        <input id="rem-${a.id}" class="w-full px-2 py-1 bg-surface-container rounded border-outline-variant text-xs focus:border-primary outline-none" placeholder="Add remark..." type="text"/>
+                    </td>
+                    <td class="p-sm">
+                        <button onclick="verifyAsset(${a.id})" class="px-2 py-1 bg-primary text-on-primary rounded text-xs hover:bg-opacity-90">Verify</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    document.getElementById('audit-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            const deptId = document.getElementById('audit-dept').value;
+            const payload = {
+                audit_name: document.getElementById('audit-name').value,
+                department_id: deptId ? parseInt(deptId) : null,
+                location: document.getElementById('audit-loc').value || null,
+                start_date: document.getElementById('audit-start').value,
+                end_date: document.getElementById('audit-end').value
+            };
+            await apiFetch('/audit/cycle', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+            alert('Audit cycle created!');
+            document.getElementById('audit-form').reset();
+            await loadActiveCycle();
+            if(activeCycleId) await loadAssets();
+        } catch(e) { alert(e.message); }
+    });
+
+    async function verifyAsset(assetId) {
+        if (!activeCycleId) return;
+        const status = document.getElementById(`ver-${assetId}`).value;
+        const remarks = document.getElementById(`rem-${assetId}`).value || null;
+
+        try {
+            await apiFetch('/audit/verify', {
+                method: 'POST',
+                body: JSON.stringify({
+                    audit_cycle_id: activeCycleId,
+                    asset_id: assetId,
+                    verification_status: status,
+                    remarks: remarks
+                })
+            });
+            alert('Asset verified successfully!');
+        } catch(e) { alert(e.message); }
+    }
+
+    document.getElementById('close-audit-btn').addEventListener('click', async () => {
+        if (!activeCycleId) return;
+        if (!confirm('Are you sure you want to close this audit cycle?')) return;
+        
+        try {
+            await apiFetch(`/audit/cycle/${activeCycleId}/close`, {
+                method: 'PATCH'
+            });
+            alert('Audit cycle closed!');
+            activeCycleId = null;
+            document.getElementById('audit-table-body').innerHTML = '';
+            await loadActiveCycle();
+        } catch(e) { alert(e.message); }
+    });
+</script>
 </body></html>

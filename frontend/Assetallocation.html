@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<html class="light" lang="en"><head><script src="js/api.js"></script><script id="auth-check">requireAuth();</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AssetFlow - Allocation & Transfer</title>
@@ -197,7 +197,7 @@
 <span class="material-symbols-outlined">contact_support</span>
                 Support
             </a>
-<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all rounded-lg" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<a class="flex items-center gap-sm text-secondary dark:text-secondary-fixed-dim px-md py-sm hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all rounded-lg" href="javascript:void(0);" onclick="logout();">
 <span class="material-symbols-outlined">logout</span>
                 Sign Out
             </a>
@@ -258,71 +258,54 @@
 <!-- Transfer Form Card -->
 <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-[0_1px_3px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)]">
 <h2 class="font-headline-md text-headline-md text-on-surface mb-lg border-b border-outline-variant pb-sm">Transfer Request Details</h2>
-<form class="flex flex-col gap-md">
-<!-- Disabled Original Allocation Details -->
+<form id="allocation-form" class="flex flex-col gap-md">
 <div class="grid grid-cols-2 gap-md p-md bg-surface-container rounded-lg border border-outline-variant mb-sm">
 <div>
-<label class="block font-label-md text-label-md text-secondary mb-1">Target Asset</label>
-<div class="font-body-md text-body-md text-on-surface flex items-center gap-xs cursor-not-allowed opacity-80">
-<span class="material-symbols-outlined text-[18px]">devices</span>
-                                        MacBook Pro 16" (AST-8472)
-                                    </div>
+<label class="block font-label-md text-label-md text-secondary mb-1">Target Asset <span class="text-error">*</span></label>
+<select id="asset-id" class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" required>
+<option value="">Select Asset</option>
+</select>
 </div>
 <div>
-<label class="block font-label-md text-label-md text-secondary mb-1">Current Holder</label>
-<div class="font-body-md text-body-md text-on-surface flex items-center gap-xs cursor-not-allowed opacity-80">
-<span class="material-symbols-outlined text-[18px]">person</span>
-                                        Sarah Jenkins (Engineering)
-                                    </div>
+<label class="block font-label-md text-label-md text-secondary mb-1">Current Status</label>
+<div id="asset-status-display" class="font-body-md text-body-md text-secondary mt-2">
+    Please select an asset
+</div>
 </div>
 </div>
 <!-- Active Transfer Fields -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface">New Assignee <span class="text-error">*</span></label>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-[20px]">search</span>
-<input class="w-full pl-10 pr-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search employee..." type="text"/>
-</div>
+<select id="employee-id" class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" required>
+<option value="">Select Employee</option>
+</select>
 </div>
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface">Target Department <span class="text-error">*</span></label>
-<select class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all appearance-none">
-<option disabled="" selected="" value="">Select department</option>
-<option>Engineering</option>
-<option>Design</option>
-<option>Marketing</option>
-<option>Operations</option>
+<select id="department-id" class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" required>
+<option value="">Select Department</option>
 </select>
 </div>
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface">Effective Date <span class="text-error">*</span></label>
-<div class="relative">
-<span class="material-symbols-outlined absolute right-3 top-2.5 text-secondary text-[20px] pointer-events-none">calendar_today</span>
-<input class="w-full pl-sm pr-10 py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" type="date"/>
-</div>
+<input id="allocation-date" class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" type="date" required/>
 </div>
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface">Return Date (Optional)</label>
-<div class="relative">
-<span class="material-symbols-outlined absolute right-3 top-2.5 text-secondary text-[20px] pointer-events-none">event</span>
-<input class="w-full pl-sm pr-10 py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" type="date"/>
-</div>
+<input id="return-date" class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" type="date"/>
 </div>
 </div>
 <div class="flex flex-col gap-1">
 <label class="font-label-md text-label-md text-on-surface">Transfer Justification / Notes</label>
-<textarea class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none" placeholder="Provide reason for transfer..." rows="3"></textarea>
+<textarea id="notes" class="w-full px-sm py-2 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none" placeholder="Provide reason for transfer..." rows="3"></textarea>
 </div>
 <!-- Actions -->
 <div class="mt-sm flex justify-end gap-sm pt-md border-t border-outline-variant">
-<button class="px-lg py-2 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high transition-colors" type="button">
-                                    Cancel
-                                </button>
-<button class="px-lg py-2 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center gap-sm hover:bg-on-primary-fixed-variant transition-colors shadow-sm" type="button">
-<span class="material-symbols-outlined text-[20px]">send</span>
-                                    Initiate Transfer Request
-                                </button>
+<button type="button" class="px-lg py-2 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-lg hover:bg-surface-container-high" onclick="document.getElementById('allocation-form').reset()">Cancel</button>
+<button type="submit" class="px-lg py-2 rounded-lg bg-primary text-on-primary font-label-lg flex items-center gap-sm hover:bg-on-primary-fixed-variant shadow-sm">
+<span class="material-symbols-outlined text-[20px]">send</span> Submit Request
+</button>
 </div>
 </form>
 </div>
@@ -404,4 +387,87 @@
 </div>
 </div>
 </main>
+<script>
+    let assetsData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFormData();
+        
+        document.getElementById('allocation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let returnDate = document.getElementById('return-date').value;
+            if (returnDate) {
+                returnDate += 'T00:00:00';
+            } else {
+                returnDate = null;
+            }
+
+            const payload = {
+                asset_id: parseInt(document.getElementById('asset-id').value),
+                employee_id: parseInt(document.getElementById('employee-id').value),
+                department_id: parseInt(document.getElementById('department-id').value),
+                expected_return_date: returnDate
+            };
+            
+            if (!payload.asset_id || isNaN(payload.employee_id) || isNaN(payload.department_id)) {
+                alert("Please fill out Target Asset, New Assignee, and Target Department.");
+                return;
+            }
+
+            try {
+                const res = await apiFetch('/allocation', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                alert('Allocation successful!');
+                document.getElementById('allocation-form').reset();
+                document.getElementById('asset-status-display').textContent = 'Please select an asset';
+                loadFormData(); // refresh asset statuses
+            } catch(err) {
+                alert(err.message);
+            }
+        });
+
+        document.getElementById('asset-id').addEventListener('change', (e) => {
+            const assetId = parseInt(e.target.value);
+            const asset = assetsData.find(a => a.id === assetId);
+            if(asset) {
+                document.getElementById('asset-status-display').innerHTML = `
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-variant text-on-surface font-label-sm">${asset.lifecycle_status}</span>
+                `;
+            } else {
+                document.getElementById('asset-status-display').textContent = 'Please select an asset';
+            }
+        });
+    });
+
+    async function loadFormData() {
+        try {
+            const assetsRes = await apiFetch('/assets');
+            assetsData = assetsRes.data;
+            const assetSelect = document.getElementById('asset-id');
+            assetSelect.innerHTML = '<option value="">Select Asset</option>';
+            assetsData.forEach(a => {
+                assetSelect.innerHTML += `<option value="${a.id}">${a.asset_name} (${a.asset_tag})</option>`;
+            });
+
+            const empRes = await apiFetch('/organization/employees');
+            const empSelect = document.getElementById('employee-id');
+            empRes.data.forEach(e => {
+                empSelect.innerHTML += `<option value="${e.id}">${e.first_name} ${e.last_name}</option>`;
+            });
+
+            const deptRes = await apiFetch('/organization/departments');
+            const deptSelect = document.getElementById('department-id');
+            deptRes.data.forEach(d => {
+                deptSelect.innerHTML += `<option value="${d.id}">${d.department_name}</option>`;
+            });
+            
+            // Set default date to today
+            document.getElementById('allocation-date').value = new Date().toISOString().split('T')[0];
+        } catch(e) {
+            console.error(e);
+        }
+    }
+</script>
 </body></html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<html class="light" lang="en"><head><script src="js/api.js"></script><script id="auth-check">requireAuth();</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AssetFlow - Dashboard</title>
@@ -211,7 +211,7 @@
 <span class="material-symbols-outlined">notifications</span>
 <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
 </button>
-<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center cursor-pointer border border-outline-variant overflow-hidden" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center cursor-pointer border border-outline-variant overflow-hidden" onclick="logout();">
 <img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXEzZlsQgSz36NW2SPKg8W8AjLSpgON7mMGQVafz3b6myEtyebpg14QWX5AUVfyxdFXlxo0MENlN-yr3xBZP7XnnL0E8ox2fJLL9qXdPOcpWi2WMns9trCGgf1whJkLcmKBFRVN6Q_rSclFibkXWu3WN8WQCmR6TrZedh1sWA9p1WM-PHDj_7cKK4WqUR7l7HDN5HkOLeGzV96R9TDjArbfSXOp5WViSVWmH7MIIK4r7uUzUYGNBpG"/>
 </div>
 </div>
@@ -222,10 +222,10 @@
 <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">Today's Overview</h2>
 </div>
 <!-- Alert Banner -->
-<div class="bg-error-container text-on-error-container p-md rounded-xl border border-error/20 flex items-center gap-md shadow-sm">
+<div id="alert-banner" class="hidden bg-error-container text-on-error-container p-md rounded-xl border border-error/20 flex items-center gap-md shadow-sm">
 <span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
-<p class="font-body-md text-body-md font-medium">3 assets are overdue for return and require immediate follow-up</p>
-<button class="ml-auto font-label-md text-label-md bg-error text-on-error px-sm py-unit rounded-md hover:bg-error/90 transition-colors">View</button>
+<p id="alert-message" class="font-body-md text-body-md font-medium">assets are overdue for return and require immediate follow-up</p>
+<button class="ml-auto font-label-md text-label-md bg-error text-on-error px-sm py-unit rounded-md hover:bg-error/90 transition-colors" onclick="window.location.href='Assetallocation.html'">View</button>
 </div>
 <!-- Quick Actions -->
 <div class="flex flex-wrap gap-md">
@@ -253,7 +253,7 @@
 </div>
 </div>
 <div class="flex items-baseline gap-sm">
-<span class="font-display-lg text-display-lg text-on-surface">128</span>
+<span class="font-display-lg text-display-lg text-on-surface" id="kpi-assets-available">0</span>
 <span class="font-label-sm text-label-sm text-green-600 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 4%</span>
 </div>
 </div>
@@ -266,7 +266,7 @@
 </div>
 </div>
 <div class="flex items-baseline gap-sm">
-<span class="font-display-lg text-display-lg text-on-surface">76</span>
+<span class="font-display-lg text-display-lg text-on-surface" id="kpi-allocated-assets">0</span>
 <span class="font-label-sm text-label-sm text-on-surface-variant">Active</span>
 </div>
 </div>
@@ -279,7 +279,7 @@
 </div>
 </div>
 <div class="flex items-baseline gap-sm">
-<span class="font-display-lg text-display-lg text-on-surface">4</span>
+<span class="font-display-lg text-display-lg text-on-surface" id="kpi-maintenance">0</span>
 <span class="font-label-sm text-label-sm text-red-600 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 2</span>
 </div>
 </div>
@@ -292,7 +292,7 @@
 </div>
 </div>
 <div class="flex items-baseline gap-sm">
-<span class="font-display-lg text-display-lg text-on-surface">9</span>
+<span class="font-display-lg text-display-lg text-on-surface" id="kpi-active-bookings">0</span>
 </div>
 </div>
 <!-- KPI Card 5 -->
@@ -304,7 +304,7 @@
 </div>
 </div>
 <div class="flex items-baseline gap-sm">
-<span class="font-display-lg text-display-lg text-on-surface">3</span>
+<span class="font-display-lg text-display-lg text-on-surface" id="kpi-pending-transfers">0</span>
 </div>
 </div>
 <!-- KPI Card 6 -->
@@ -316,7 +316,7 @@
 </div>
 </div>
 <div class="flex items-baseline gap-sm">
-<span class="font-display-lg text-display-lg text-on-surface">12</span>
+<span class="font-display-lg text-display-lg text-on-surface" id="kpi-upcoming-returns">0</span>
 <span class="font-label-sm text-label-sm text-on-surface-variant">Next 48h</span>
 </div>
 </div>
@@ -327,42 +327,60 @@
 <h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Recent Activity</h3>
 <button class="text-primary font-label-md text-label-md hover:underline">View All</button>
 </div>
-<div class="flex flex-col">
-<!-- Activity Item 1 -->
-<div class="p-md flex gap-md items-start border-b border-outline-variant hover:bg-surface-container-lowest transition-colors group" onclick="window.location.href='Assetregistration.html'" style="cursor: pointer;">
-<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0 mt-xs">
-<span class="material-symbols-outlined text-[20px]">laptop_mac</span>
-</div>
-<div class="flex-grow">
-<h4 class="font-label-lg text-label-lg text-on-surface">Laptop AF-0114 allocated to Priya Shah</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Allocation complete for new joiner onboarding.</p>
-</div>
-<span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">10 min ago</span>
-</div>
-<!-- Activity Item 2 -->
-<div class="p-md flex gap-md items-start border-b border-outline-variant hover:bg-surface-container-lowest transition-colors group" onclick="window.location.href='resourcebooking.html'" style="cursor: pointer;">
-<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0 mt-xs">
-<span class="material-symbols-outlined text-[20px]">meeting_room</span>
-</div>
-<div class="flex-grow">
-<h4 class="font-label-lg text-label-lg text-on-surface">Room B2 booking confirmed</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Booked by Marketing Team for Q3 Planning.</p>
-</div>
-<span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">45 min ago</span>
-</div>
-<!-- Activity Item 3 -->
-<div class="p-md flex gap-md items-start hover:bg-surface-container-lowest transition-colors group" onclick="window.location.href='Maintenancemanagement.html'" style="cursor: pointer;">
-<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 shrink-0 mt-xs">
-<span class="material-symbols-outlined text-[20px]">check_circle</span>
-</div>
-<div class="flex-grow">
-<h4 class="font-label-lg text-label-lg text-on-surface">Projector AF-0062 maintenance resolved</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">Bulb replacement completed by IT Support.</p>
-</div>
-<span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">2 hrs ago</span>
+<div class="flex flex-col" id="recent-activity-list">
+<!-- Activity Items will be injected here -->
 </div>
 </div>
-</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const kpisData = await apiFetch('/dashboard/kpis');
+        if (kpisData && kpisData.success) {
+            const kpis = kpisData.data;
+            document.getElementById('kpi-upcoming-returns').textContent = kpis.upcoming_returns;
+            document.getElementById('kpi-active-bookings').textContent = kpis.active_bookings;
+            document.getElementById('kpi-pending-transfers').textContent = kpis.pending_transfers;
+            document.getElementById('kpi-maintenance').textContent = kpis.assets_under_maintenance;
+            document.getElementById('kpi-allocated-assets').textContent = kpis.assets_allocated;
+            document.getElementById('kpi-assets-available').textContent = kpis.assets_available;
+
+            const overdue = kpis.overdue_returns;
+            const alertBanner = document.getElementById('alert-banner');
+            const alertMessage = document.getElementById('alert-message');
+            if (overdue && overdue > 0) {
+                alertMessage.textContent = `${overdue} asset${overdue > 1 ? 's' : ''} ${overdue > 1 ? 'are' : 'is'} overdue for return and require immediate follow-up`;
+                alertBanner.classList.remove('hidden');
+            } else {
+                alertBanner.classList.add('hidden');
+            }
+        }
+
+        const activityData = await apiFetch('/dashboard/recent-activity');
+        if (activityData && activityData.success) {
+            const list = document.getElementById('recent-activity-list');
+            list.innerHTML = '';
+            activityData.data.forEach(act => {
+                const date = new Date(act.created_at).toLocaleString();
+                list.innerHTML += `
+                    <div class="p-md flex gap-md items-start border-b border-outline-variant hover:bg-surface-container-lowest transition-colors group">
+                        <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0 mt-xs">
+                            <span class="material-symbols-outlined text-[20px]">info</span>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-label-lg text-label-lg text-on-surface">${act.action}</h4>
+                            <p class="font-body-sm text-body-sm text-on-surface-variant mt-unit">${act.description}</p>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">${date}</span>
+                    </div>
+                `;
+            });
+        }
+    } catch (err) {
+        console.error("Dashboard fetch error", err);
+    }
+});
+</script>
 </main>
 </div>
 </body></html>

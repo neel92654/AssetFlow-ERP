@@ -1,0 +1,19 @@
+2026-07-12 15:18:09,205 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-07-12 15:18:09,206 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2026-07-12 15:18:11,090 INFO activity_logs.service Thread-1 (process_request_thread) : ACTIVITY LOG | User: 1 | Module: Authentication | Action: Login | Entity: None | IP: None
+2026-07-12 15:18:11,090 INFO werkzeug Thread-1 (process_request_thread) : 127.0.0.1 - - [12/Jul/2026 15:18:11] "POST /api/v1/auth/login HTTP/1.1" 200 -
+2026-07-12 15:58:45,059 INFO activity_logs.service MainThread : ACTIVITY LOG | User: None | Module: Authentication | Action: Failed Login
+2026-07-12 16:02:40,691 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Signup
+2026-07-12 16:02:40,694 INFO notifications.service MainThread : NOTIFICATION | User: 2 | Title: Welcome to AssetFlow ERP | Message: Your account has been created successfully.
+2026-07-12 16:02:56,089 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:03:41,394 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:17:17,452 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:17:42,737 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:22:45,088 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:28:52,042 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:34:47,534 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Authentication | Action: Login
+2026-07-12 16:35:30,499 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Assets | Action: Register Asset
+2026-07-12 16:42:10,345 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Assets | Action: Register Asset
+2026-07-12 16:46:06,590 INFO activity_logs.service MainThread : ACTIVITY LOG | User: 2 | Module: Allocation | Action: Allocate Asset
+2026-07-12 16:46:06,594 INFO notifications.service MainThread : NOTIFICATION | User: 2 | Title: Asset Allocated | Message: Asset Dell Inspirion 5558 has been allocated to you.

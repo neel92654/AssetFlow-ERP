@@ -419,6 +419,13 @@
         function renderDepartments(departments) {
             const body = document.getElementById('departmentTableBody');
             const countText = document.getElementById('departmentCountText');
+            const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
 
             body.innerHTML = departments.map((department) => {
                 const statusStyle = department.status.toLowerCase() === 'active'
@@ -427,10 +434,10 @@
 
                 return `
                     <tr class="hover:bg-surface-container-low transition-colors group">
-                        <td class="py-sm px-lg"><div class="font-label-lg text-label-lg text-on-surface">${department.name}</div></td>
-                        <td class="py-sm px-lg font-body-md text-body-md text-on-surface">${department.head}</td>
-                        <td class="py-sm px-lg font-body-md text-body-md text-secondary">${department.parentNode || '-'}</td>
-                        <td class="py-sm px-lg"><span class="inline-flex items-center px-sm py-unit rounded-full ${statusStyle} font-label-sm text-label-sm uppercase tracking-wider">${department.status}</span></td>
+                        <td class="py-sm px-lg"><div class="font-label-lg text-label-lg text-on-surface">${escapeHtml(department.name)}</div></td>
+                        <td class="py-sm px-lg font-body-md text-body-md text-on-surface">${escapeHtml(department.head)}</td>
+                        <td class="py-sm px-lg font-body-md text-body-md text-secondary">${escapeHtml(department.parentNode || '-')}</td>
+                        <td class="py-sm px-lg"><span class="inline-flex items-center px-sm py-unit rounded-full ${statusStyle} font-label-sm text-label-sm uppercase tracking-wider">${escapeHtml(department.status)}</span></td>
                         <td class="py-sm px-lg text-right text-secondary">—</td>
                     </tr>
                 `;

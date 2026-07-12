@@ -444,7 +444,7 @@
 <label class="font-label-md text-label-md text-on-surface font-semibold">End Time</label>
 <div class="relative">
 <!-- Styling as error to simulate form validation context related to the conflict -->
-<input class="w-full bg-error-container border border-error rounded-lg p-sm text-on-error-container font-body-md text-body-md focus:ring-2 focus:ring-error focus:border-error" id="endTime" type="time" value="11:30"/>
+<input class="w-full bg-surface-bright border border-outline rounded-lg p-sm text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary" id="endTime" type="time" value="11:30"/>
 <span class="font-label-sm text-label-sm text-error absolute -bottom-5 left-0 hidden" id="bookingError"></span>
 </div>
 </div>
@@ -460,7 +460,7 @@
 <div class="pt-md mt-auto border-t border-outline-variant flex gap-sm justify-end">
 <button class="px-md py-sm rounded-lg border border-outline text-on-surface hover:bg-surface-container-high font-label-lg text-label-lg transition-colors" type="button">Cancel</button>
 <!-- Button disabled state styling to reflect conflict -->
-<button class="px-md py-sm rounded-lg bg-surface-variant text-outline cursor-not-allowed font-label-lg text-label-lg flex items-center gap-2 transition-colors" id="confirmBooking" type="submit">
+<button class="px-md py-sm rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center gap-2 transition-colors hover:bg-primary-fixed-variant" id="confirmBooking" type="submit">
 <span class="material-symbols-outlined text-[18px]">event_available</span>
                                         Confirm Booking
                                     </button>

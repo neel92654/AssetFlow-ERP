@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 from datetime import datetime
+import os
 from pathlib import Path
 from typing import Any
 
@@ -375,4 +376,5 @@ def report_summary() -> Any:
 
 if __name__ == "__main__":
     init_db()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    debug_mode = os.getenv("FLASK_DEBUG", "").lower() in {"1", "true", "yes"}
+    app.run(host="0.0.0.0", port=5000, debug=debug_mode)

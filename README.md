@@ -71,6 +71,10 @@ AssetFlow-ERP/
 │   └── Activitylogs.html
 │
 ├── backend/
+│   ├── app.py
+│   ├── assetflow.db (auto-created)
+│   ├── requirements.txt
+│   └── README.md
 ├── database/
 ├── assets/
 └── README.md
@@ -121,6 +125,7 @@ cd AssetFlow-ERP
 Install backend dependencies:
 
 ```bash
+cd backend
 pip install -r requirements.txt
 ```
 
@@ -130,7 +135,7 @@ Run the backend:
 python app.py
 ```
 
-Open `login.html` in your browser or serve the frontend using your preferred local server.
+Open `frontend/login.html` in your browser (or serve the frontend with your preferred local server).
 
 ---
 
@@ -146,5 +151,4 @@ Open `login.html` in your browser or serve the frontend using your preferred loc
 ## 📄 License
 
 Developed as part of a Hackathon project for educational and demonstration purposes.
-
 

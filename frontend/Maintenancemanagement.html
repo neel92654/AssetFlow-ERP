@@ -438,7 +438,7 @@
             }
 
             dropzone.appendChild(card);
-            const column = dropzone.closest('.w-[320px]');
+            const column = dropzone.closest('div[class*="w-[320px]"]');
             const nextState = column?.querySelector('h3')?.textContent?.trim();
             const requestId = card.dataset.requestId;
 

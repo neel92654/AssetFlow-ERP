@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><script id="auth-check">if(sessionStorage.getItem('isAuthenticated') !== 'true') { window.location.href = 'login.html'; }</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Organization Setup - AssetFlow</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#dbe1ff",
+                        "surface-bright": "#faf8ff",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary-container": "#54647a",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface": "#faf8ff",
+                        "secondary": "#505f76",
+                        "surface-tint": "#0053db",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ededf9",
+                        "on-surface": "#191b23",
+                        "background": "#faf8ff",
+                        "tertiary": "#943700",
+                        "secondary-fixed": "#d3e4fe",
+                        "outline-variant": "#c3c6d7",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-background": "#191b23",
+                        "on-surface-variant": "#434655",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-variant": "#e1e2ed",
+                        "on-primary-container": "#eeefff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "tertiary-container": "#bc4800",
+                        "on-primary-fixed": "#00174b",
+                        "inverse-surface": "#2e3039",
+                        "inverse-on-surface": "#f0f0fb",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d9d9e5",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary-fixed": "#360f00",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3fe",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737686"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "md": "16px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "xs": "4px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "label-lg": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+                        "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean look in tables */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md flex h-screen overflow-hidden antialiased">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex fixed left-0 top-0 bottom-0 flex-col w-64 z-40 py-lg bg-surface-container-low border-r border-outline-variant">
+<!-- Header -->
+<div class="px-lg mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-black text-on-surface tracking-tight" onclick="window.location.href='dashboard.html'" style="cursor: pointer;">AssetFlow</h2>
+<p class="font-label-sm text-label-sm text-secondary mt-[2px]">Enterprise EAM</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 px-sm space-y-1">
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="dashboard.html">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-lg text-label-lg">Dashboard</span>
+</a>
+<!-- ACTIVE STATE LOGIC: Organization -->
+<a class="flex items-center gap-sm bg-primary-container text-on-primary-container rounded-lg px-md py-sm font-bold border-l-4 border-primary scale-[0.99] duration-100" href="organisationsetup.html">
+<span class="material-symbols-outlined icon-fill text-[20px]">corporate_fare</span>
+<span class="font-label-lg text-label-lg">Organization</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="Assetregistration.html">
+<span class="material-symbols-outlined text-[20px]">contact_page</span>
+<span class="font-label-lg text-label-lg">Directory</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="Assetallocation.html">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+<span class="font-label-lg text-label-lg">Allocations</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="resourcebooking.html">
+<span class="material-symbols-outlined text-[20px]">event_available</span>
+<span class="font-label-lg text-label-lg">Booking</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="Maintenancemanagement.html">
+<span class="material-symbols-outlined text-[20px]">build</span>
+<span class="font-label-lg text-label-lg">Maintenance</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="Assetaudit.html">
+<span class="material-symbols-outlined text-[20px]">fact_check</span>
+<span class="font-label-lg text-label-lg">Audits</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="Reportandanalysis.html">
+<span class="material-symbols-outlined text-[20px]">assessment</span>
+<span class="font-label-lg text-label-lg">Reports</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="Activitylogs.html">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-lg text-label-lg">Logs</span>
+</a>
+</nav>
+<!-- Footer Links -->
+<div class="px-sm mt-auto border-t border-outline-variant pt-md space-y-1">
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+<span class="font-label-lg text-label-lg">Support</span>
+</a>
+<a class="flex items-center gap-sm text-secondary px-md py-sm rounded-lg hover:bg-surface-container-highest transition-all" href="javascript:void(0);" onclick="sessionStorage.clear(); window.location.href='login.html';">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-label-lg text-label-lg">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-64 flex flex-col h-screen w-full bg-surface">
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant">
+<!-- Left: Search -->
+<div class="flex items-center w-96 relative">
+<span class="material-symbols-outlined absolute left-sm text-outline text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border-transparent text-body-md text-on-surface rounded-lg pl-xl pr-md py-sm focus:bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none placeholder:text-secondary" placeholder="Search across organization..." type="text"/>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[22px]">help</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-sm"></div>
+<img alt="User Profile Avatar" class="w-9 h-9 rounded-full object-cover border border-outline-variant cursor-pointer hover:opacity-80 transition-opacity" data-alt="Professional corporate headshot of a mature female executive with short grey hair, wearing a navy blue blazer over a white blouse. Bright, clean lighting, light grey background. High resolution, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXEzZlsQgSz36NW2SPKg8W8AjLSpgON7mMGQVafz3b6myEtyebpg14QWX5AUVfyxdFXlxo0MENlN-yr3xBZP7XnnL0E8ox2fJLL9qXdPOcpWi2WMns9trCGgf1whJkLcmKBFRVN6Q_rSclFibkXWu3WN8WQCmR6TrZedh1sWA9p1WM-PHDj_7cKK4WqUR7l7HDN5HkOLeGzV96R9TDjArbfSXOp5WViSVWmH7MIIK4r7uUzUYGNBpG"/>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 overflow-auto p-margin-desktop">
+<!-- Page Header -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface tracking-tight mb-unit">Organization Setup</h1>
+<p class="font-body-md text-body-md text-secondary">Manage enterprise taxonomy, departmental structures, and personnel roles.</p>
+</div>
+<div class="flex items-center gap-sm bg-surface-container-high px-md py-sm rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-secondary text-[18px]">info</span>
+<span class="font-label-md text-label-md text-secondary">Admin Access Level</span>
+</div>
+</div>
+<!-- Tabbed Interface -->
+<div class="mb-lg border-b border-outline-variant">
+<nav aria-label="Tabs" class="flex gap-lg">
+<button class="font-label-lg text-label-lg text-primary font-bold border-b-2 border-primary pb-sm px-unit transition-colors" id="tab-btn-departments" onclick="switchTab('departments')">
+                        Departments
+                    </button>
+<button class="font-label-lg text-label-lg text-secondary border-b-2 border-transparent pb-sm px-unit hover:text-on-surface transition-colors" id="tab-btn-categories" onclick="switchTab('categories')">
+                        Asset Categories
+                    </button>
+<button class="font-label-lg text-label-lg text-secondary border-b-2 border-transparent pb-sm px-unit hover:text-on-surface transition-colors" id="tab-btn-directory" onclick="switchTab('directory')">
+                        Employee Directory
+                    </button>
+</nav>
+</div>
+<!-- Tab 1: Departments Content -->
+<div class="block" id="tab-content-departments">
+<!-- Toolbar -->
+<div class="flex justify-between items-center mb-md">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="border border-outline-variant rounded-lg pl-lg pr-md py-sm text-body-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64 bg-surface-container-lowest" placeholder="Filter departments..." type="text"/>
+</div>
+<select class="border border-outline-variant rounded-lg px-md py-sm text-body-sm text-on-surface bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Inactive</option>
+</select>
+</div>
+<button class="flex items-center gap-sm bg-primary text-on-primary px-md py-sm rounded-lg font-label-lg text-label-lg hover:bg-primary-container transition-colors shadow-[0px_1px_3px_rgba(0,0,0,0.1),0px_1px_2px_rgba(0,0,0,0.06)]">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Add Department
+                    </button>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0px_1px_3px_rgba(0,0,0,0.1),0px_1px_2px_rgba(0,0,0,0.06)]">
+<div class="overflow-x-auto no-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-md px-lg font-label-md text-label-md text-secondary uppercase tracking-wider whitespace-nowrap">Department Name</th>
+<th class="py-md px-lg font-label-md text-label-md text-secondary uppercase tracking-wider whitespace-nowrap">Department Head</th>
+<th class="py-md px-lg font-label-md text-label-md text-secondary uppercase tracking-wider whitespace-nowrap">Parent Node</th>
+<th class="py-md px-lg font-label-md text-label-md text-secondary uppercase tracking-wider whitespace-nowrap">Status</th>
+<th class="py-md px-lg font-label-md text-label-md text-secondary uppercase tracking-wider whitespace-nowrap text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant bg-surface-container-lowest">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-lg text-label-lg text-on-surface">Information Technology</div>
+<div class="font-body-sm text-body-sm text-secondary mt-unit">Code: IT-001</div>
+</td>
+<td class="py-sm px-lg">
+<div class="flex items-center gap-sm">
+<img class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="Professional corporate headshot of a young Asian man with short dark hair, wearing a light blue dress shirt and glasses. Bright, clean lighting, light grey background. High resolution, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSA0OOW3WplwwTRjOwvZYsRkcXqsi8rvfr60WTFXOMSoXTRPaGa55JhrDtT8VQfea16CW0XLf8f83RFYTouiWXABUKEzBO2jMNhIr9NljOS75nKsnAme5UDWMR1pWppoHuFsjUxJXMAOgEuWsfm3CZSZDYuwC6PZDzA0a7WZ7F7--_HOPnmQlhejdtAPpoXaQayGoW8WrFBKFhEC5-Rf68q5eBlEXKvyaydruNm1_oiiqGls7sAVYf"/>
+<span class="font-body-md text-body-md text-on-surface">David Chen</span>
+</div>
+</td>
+<td class="py-sm px-lg font-body-md text-body-md text-secondary">
+                                        Executive Board
+                                    </td>
+<td class="py-sm px-lg">
+<span class="inline-flex items-center px-sm py-unit rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider">Active</span>
+</td>
+<td class="py-sm px-lg text-right">
+<button class="text-secondary hover:text-primary transition-colors p-unit rounded-md hover:bg-surface-container-high opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-secondary hover:text-error transition-colors p-unit rounded-md hover:bg-surface-container-high opacity-0 group-hover:opacity-100 focus:opacity-100 ml-xs">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-lg text-label-lg text-on-surface">Facilities Management</div>
+<div class="font-body-sm text-body-sm text-secondary mt-unit">Code: FM-100</div>
+</td>
+<td class="py-sm px-lg">
+<div class="flex items-center gap-sm">
+<img class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="Professional corporate headshot of a middle-aged Hispanic woman with curly dark hair, wearing a professional grey suit jacket. Bright, clean lighting, light grey background. High resolution, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD970pPrAKsTVC11CMxoK-x6T746gnQawJrYLdRR84hBOWvridXanjH8zD71DF7612wJabkVGEOYRoFyVPTRW8wj8V3iTGeYAGk6h7guZYqXH3I7j5iHrzC10qAdSygx7tzSwc9kF8kTfjqdYVmHnUNXZDUXc1Rfd4zcbMnEYkzNSoeYUjJUwJZWoz7uCQeRwnch-fsTZklHl9Qkyug242wePZJ0x_657J5EbwJv_qaKyHMbVO_wSGc"/>
+<span class="font-body-md text-body-md text-on-surface">Maria Rodriguez</span>
+</div>
+</td>
+<td class="py-sm px-lg font-body-md text-body-md text-secondary">
+                                        Operations
+                                    </td>
+<td class="py-sm px-lg">
+<span class="inline-flex items-center px-sm py-unit rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider">Active</span>
+</td>
+<td class="py-sm px-lg text-right">
+<button class="text-secondary hover:text-primary transition-colors p-unit rounded-md hover:bg-surface-container-high opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-secondary hover:text-error transition-colors p-unit rounded-md hover:bg-surface-container-high opacity-0 group-hover:opacity-100 focus:opacity-100 ml-xs">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Inactive Example) -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-lg text-label-lg text-secondary">Legacy Hardware Support</div>
+<div class="font-body-sm text-body-sm text-secondary mt-unit">Code: IT-999</div>
+</td>
+<td class="py-sm px-lg text-secondary font-body-md text-body-md italic">
+                                        Unassigned
+                                    </td>
+<td class="py-sm px-lg font-body-md text-body-md text-secondary">
+                                        Information Technology
+                                    </td>
+<td class="py-sm px-lg">
+<span class="inline-flex items-center px-sm py-unit rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Archived</span>
+</td>
+<td class="py-sm px-lg text-right">
+<button class="text-secondary hover:text-primary transition-colors p-unit rounded-md hover:bg-surface-container-high opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[20px]">settings_backup_restore</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-lowest border-t border-outline-variant px-lg py-sm flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-secondary">Showing 1 to 3 of 24 departments</span>
+<div class="flex items-center gap-sm">
+<button class="p-unit rounded-md border border-outline-variant text-secondary hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-unit rounded-md border border-outline-variant text-secondary hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Tab 2: Categories (Hidden) -->
+<div class="hidden" id="tab-content-categories">
+<div class="flex flex-col items-center justify-center py-2xl border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[48px] text-outline mb-md">category</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-unit">Asset Categories</h3>
+<p class="font-body-md text-body-md text-secondary text-center max-w-md">Define global classifications for assets, including standard warranty periods and depreciation schedules.</p>
+</div>
+</div>
+<!-- Tab 3: Directory (Hidden) -->
+<div class="hidden" id="tab-content-directory">
+<div class="flex flex-col items-center justify-center py-2xl border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[48px] text-outline mb-md">groups</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-unit">Employee Directory</h3>
+<p class="font-body-md text-body-md text-secondary text-center max-w-md">Manage personnel access, assign roles, and associate employees with organizational units.</p>
+</div>
+</div>
+</main>
+</div>
+<!-- Simple Tab Switching Logic -->
+<script>
+        function switchTab(tabId) {
+            // Arrays of IDs
+            const tabs = ['departments', 'categories', 'directory'];
+            
+            tabs.forEach(id => {
+                const btn = document.getElementById(`tab-btn-${id}`);
+                const content = document.getElementById(`tab-content-${id}`);
+                
+                if (id === tabId) {
+                    // Activate
+                    btn.classList.remove('text-secondary', 'border-transparent', 'hover:text-on-surface');
+                    btn.classList.add('text-primary', 'font-bold', 'border-primary');
+                    content.classList.remove('hidden');
+                    content.classList.add('block');
+                } else {
+                    // Deactivate
+                    btn.classList.remove('text-primary', 'font-bold', 'border-primary');
+                    btn.classList.add('text-secondary', 'border-transparent', 'hover:text-on-surface');
+                    content.classList.remove('block');
+                    content.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body></html>
